@@ -1,0 +1,42 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "36120_26sp_at2_25945320_experiments"
+version = "0.0.1"
+description = "Hi"
+authors = [
+  { name = "Juan Sebastian Vargas" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = [
+    "loguru",
+    "mkdocs",
+    "pip",
+    "pytest",
+    "python-dotenv",
+    "ruff",
+    "tqdm",
+    "typer",
+]
+requires-python = "~=3.10.0"
+
+
+[tool.ruff]
+line-length = 99
+src = ["36120_26sp_at2_25945320_experiments"]
+include = ["pyproject.toml", "36120_26sp_at2_25945320_experiments/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # Add import sorting
+
+[tool.ruff.lint.isort]
+known-first-party = ["36120_26sp_at2_25945320_experiments"]
+force-sort-within-sections = true
+
