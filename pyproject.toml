@@ -17,13 +17,19 @@ classifiers = [
 ]
 dependencies = [
     "loguru",
+    "matplotlib",
     "mkdocs",
+    "pandas",
     "pip",
     "pytest",
     "python-dotenv",
+    "requests",
     "ruff",
+    "scikit-learn",
+    "torch",
     "tqdm",
     "typer",
+    "xgboost",
 ]
 requires-python = "~=3.10.0"
 

@@ -1,0 +1,126 @@
+{
+  "experiment": "cci_lstm_multihorizon",
+  "student_id": "25945320",
+  "architecture": "LSTM",
+  "target": "Climate Comfort Index",
+  "target_columns": [
+    "cci_t1",
+    "cci_t2",
+    "cci_t3"
+  ],
+  "horizons_days": [
+    1,
+    2,
+    3
+  ],
+  "prediction_type": "regression",
+  "learning_target": "cci_th - cci, standardised per horizon",
+  "inversion": "cci_th = target_scaler.inverse_transform(output) + cci_at_t",
+  "sequence_features": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "wind_speed_10m",
+    "cloud_cover",
+    "precipitation",
+    "wind_gusts_10m",
+    "cci",
+    "doy_sin",
+    "doy_cos"
+  ],
+  "sequence_feature_order_is_significant": true,
+  "lookback_days": 14,
+  "hidden_size": 32,
+  "dropout": 0.2,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "loss": "SmoothL1",
+  "min_epochs": 30,
+  "patience": 25,
+  "best_epoch": 11,
+  "n_windows": {
+    "train": 2876,
+    "val": 350
+  },
+  "validation_metrics": {
+    "cci_t1": {
+      "mae": 6.417632579803467,
+      "rmse": 8.590305595246688,
+      "r2": 0.4020150303840637,
+      "pred_std": 7.271199703216553
+    },
+    "cci_t2": {
+      "mae": 7.038877010345459,
+      "rmse": 9.369938005142554,
+      "r2": 0.2859143614768982,
+      "pred_std": 5.758207321166992
+    },
+    "cci_t3": {
+      "mae": 7.326230525970459,
+      "rmse": 9.683779685084632,
+      "r2": 0.23868286609649658,
+      "pred_std": 5.321389198303223
+    }
+  },
+  "baseline_metrics": {
+    "cci_t1": {
+      "persistence": {
+        "mae": 7.603217124938965,
+        "rmse": 10.004791256367925,
+        "r2": 0.18887251615524292,
+        "pred_std": 11.048290252685547
+      },
+      "constant": {
+        "mae": 9.075482368469238,
+        "rmse": 11.518745072146938,
+        "r2": -0.07518553733825684,
+        "pred_std": 0.0
+      }
+    },
+    "cci_t2": {
+      "persistence": {
+        "mae": 8.62444019317627,
+        "rmse": 11.518149607716605,
+        "r2": -0.07905173301696777,
+        "pred_std": 11.048290252685547
+      },
+      "constant": {
+        "mae": 9.044181823730469,
+        "rmse": 11.475006808276847,
+        "r2": -0.07098352909088135,
+        "pred_std": 0.0
+      }
+    },
+    "cci_t3": {
+      "persistence": {
+        "mae": 9.264552116394043,
+        "rmse": 12.096406235871966,
+        "r2": -0.18792355060577393,
+        "pred_std": 11.048290252685547
+      },
+      "constant": {
+        "mae": 9.061677932739258,
+        "rmse": 11.480405617170746,
+        "r2": -0.07001590728759766,
+        "pred_std": 0.0
+      }
+    }
+  },
+  "verdicts": {
+    "cci_t1": "BEATS PERSISTENCE by 1.186 MAE (15.6%)",
+    "cci_t2": "BEATS PERSISTENCE by 1.586 MAE (18.4%)",
+    "cci_t3": "BEATS PERSISTENCE by 1.938 MAE (20.9%)"
+  },
+  "split_boundaries": {
+    "val_start": "2024-01-01",
+    "test_start": "2025-01-01",
+    "production_cutoff": "2026-01-01"
+  },
+  "embargo_days": 3,
+  "evaluated_on": [
+    "train",
+    "val"
+  ],
+  "held_out": [
+    "test"
+  ]
+}

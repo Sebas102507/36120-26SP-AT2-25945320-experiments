@@ -1,0 +1,52 @@
+name: Sync production models to API
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  sync-production-models:
+    runs-on: ubuntu-latest
+    env:
+      API_REPOSITORY: Sebas102507/36120-26SP-AT2-25945320-api
+      API_MODEL_DIRECTORY: ml/model
+    steps:
+      - name: Check out experiments repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Check out API repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.API_REPOSITORY }}
+          ref: main
+          token: ${{ secrets.API_REPO_TOKEN }}
+          path: api-repository
+
+      - name: Copy production model artefacts
+        run: |
+          destination="api-repository/${API_MODEL_DIRECTORY}"
+          mkdir -p "$destination"
+          rsync -av --exclude=".gitkeep" models/comfort_climate/production/ "$destination/"
+          rsync -av --exclude=".gitkeep" models/weather_hazard/production/ "$destination/"
+
+      - name: Commit and push changed artefacts
+        working-directory: api-repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_REPO_TOKEN }}
+        run: |
+          if git diff --quiet -- "${API_MODEL_DIRECTORY}"; then
+            echo "No production model changes to sync."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${API_MODEL_DIRECTORY}"
+          git commit -m "chore: sync production model artefacts"
+          git push origin main
