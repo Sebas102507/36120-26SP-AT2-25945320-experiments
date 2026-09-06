@@ -32,6 +32,7 @@ jobs:
         run: |
           destination="api-repository/${API_MODEL_DIRECTORY}"
           mkdir -p "$destination"
+          find "$destination" -maxdepth 1 -type f \( -name "cci_*" -o -name "model_deploy.joblib" \) -delete
           rsync -av --exclude=".gitkeep" models/comfort_climate/production/ "$destination/"
           rsync -av --exclude=".gitkeep" models/weather_hazard/production/ "$destination/"
 
