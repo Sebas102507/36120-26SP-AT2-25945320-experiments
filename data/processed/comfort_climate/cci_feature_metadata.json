@@ -1,17 +1,11 @@
 {
   "student_id": "25945320",
-  "target": "Climate Comfort Index",
-  "prediction_type": "regression",
-  "horizons_days": [
-    1,
-    2,
-    3
-  ],
-  "target_columns": [
-    "cci_t1",
-    "cci_t2",
-    "cci_t3"
-  ],
+  "location": {
+    "city": "Sydney, NSW, Australia",
+    "latitude": -33.8688,
+    "longitude": 151.2093
+  },
+  "source": "Open-Meteo Historical Weather API",
   "feature_columns": [
     "temperature_2m",
     "relative_humidity_2m",
@@ -25,6 +19,11 @@
     "cloud_score",
     "rain_score",
     "cci",
+    "rain_hazard",
+    "wind_hazard",
+    "cloud_hazard",
+    "temp_hazard",
+    "whi",
     "temperature_2m_lag1",
     "temperature_2m_lag2",
     "temperature_2m_lag3",
@@ -45,14 +44,18 @@
     "precipitation_lag2",
     "precipitation_lag3",
     "precipitation_lag7",
-    "cci_lag1",
-    "cci_lag2",
-    "cci_lag3",
-    "cci_lag7",
     "wind_gusts_10m_lag1",
     "wind_gusts_10m_lag2",
     "wind_gusts_10m_lag3",
     "wind_gusts_10m_lag7",
+    "cci_lag1",
+    "cci_lag2",
+    "cci_lag3",
+    "cci_lag7",
+    "whi_lag1",
+    "whi_lag2",
+    "whi_lag3",
+    "whi_lag7",
     "temperature_2m_roll3_mean",
     "temperature_2m_roll3_std",
     "temperature_2m_roll7_mean",
@@ -85,6 +88,14 @@
     "cci_roll14_std",
     "cci_roll30_mean",
     "cci_roll30_std",
+    "whi_roll3_mean",
+    "whi_roll3_std",
+    "whi_roll7_mean",
+    "whi_roll7_std",
+    "whi_roll14_mean",
+    "whi_roll14_std",
+    "whi_roll30_mean",
+    "whi_roll30_std",
     "precipitation_roll3_sum",
     "precipitation_roll7_sum",
     "precipitation_roll14_sum",
@@ -97,6 +108,8 @@
     "temperature_2m_delta3",
     "cci_delta1",
     "cci_delta3",
+    "whi_delta1",
+    "whi_delta3",
     "doy_sin",
     "doy_cos"
   ],
@@ -109,13 +122,18 @@
       "precipitation",
       "wind_gusts_10m"
     ],
-    "same_day_scores": [
+    "same_day_indices": [
       "temp_score",
       "humidity_score",
       "wind_score",
       "cloud_score",
       "rain_score",
-      "cci"
+      "cci",
+      "rain_hazard",
+      "wind_hazard",
+      "cloud_hazard",
+      "temp_hazard",
+      "whi"
     ],
     "lags": [
       "temperature_2m_lag1",
@@ -138,14 +156,18 @@
       "precipitation_lag2",
       "precipitation_lag3",
       "precipitation_lag7",
+      "wind_gusts_10m_lag1",
+      "wind_gusts_10m_lag2",
+      "wind_gusts_10m_lag3",
+      "wind_gusts_10m_lag7",
       "cci_lag1",
       "cci_lag2",
       "cci_lag3",
       "cci_lag7",
-      "wind_gusts_10m_lag1",
-      "wind_gusts_10m_lag2",
-      "wind_gusts_10m_lag3",
-      "wind_gusts_10m_lag7"
+      "whi_lag1",
+      "whi_lag2",
+      "whi_lag3",
+      "whi_lag7"
     ],
     "rolling_statistics": [
       "temperature_2m_roll3_mean",
@@ -179,7 +201,15 @@
       "cci_roll14_mean",
       "cci_roll14_std",
       "cci_roll30_mean",
-      "cci_roll30_std"
+      "cci_roll30_std",
+      "whi_roll3_mean",
+      "whi_roll3_std",
+      "whi_roll7_mean",
+      "whi_roll7_std",
+      "whi_roll14_mean",
+      "whi_roll14_std",
+      "whi_roll30_mean",
+      "whi_roll30_std"
     ],
     "rolling_precipitation": [
       "precipitation_roll3_sum",
@@ -197,7 +227,9 @@
       "temperature_2m_delta1",
       "temperature_2m_delta3",
       "cci_delta1",
-      "cci_delta3"
+      "cci_delta3",
+      "whi_delta1",
+      "whi_delta3"
     ],
     "seasonal": [
       "doy_sin",
@@ -210,18 +242,47 @@
     "wind_speed_10m": "mean",
     "cloud_cover": "mean",
     "precipitation": "sum",
-    "wind_gusts_10m": "max"
+    "wind_gusts_10m": "max",
+    "snowfall": "sum"
   },
+  "excluded_constant_columns": [
+    "snowfall",
+    "snow_hazard"
+  ],
+  "snowfall_observed": true,
   "warmup_days": 30,
-  "embargo_days": 3,
+  "file_layout": {
+    "features": "X_{split}.csv",
+    "targets": "y_{split}.csv",
+    "index": "feature_date",
+    "note": "X and y are aligned by the feature_date index, not by row order."
+  },
   "split_boundaries": {
     "val_start": "2024-01-01",
     "test_start": "2025-01-01",
     "production_cutoff": "2026-01-01"
   },
+  "target": "Climate Comfort Index",
+  "prediction_type": "regression",
+  "horizons_days": [
+    1,
+    2,
+    3
+  ],
+  "target_columns": [
+    "cci_t1",
+    "cci_t2",
+    "cci_t3"
+  ],
+  "embargo_days": 3,
   "split_rows": {
     "train": 2889,
     "val": 363,
     "test": 362
+  },
+  "baselines_train": {
+    "persistence_mae_t1": 6.927468594957887,
+    "persistence_mae_t2": 8.80695706415138,
+    "persistence_mae_t3": 9.520024950963423
   }
 }

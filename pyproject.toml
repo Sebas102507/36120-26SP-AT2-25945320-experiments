@@ -16,9 +16,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 dependencies = [
+    "ipykernel",
+    "joblib",
     "loguru",
     "matplotlib",
     "mkdocs",
+    "numpy",
+    "optuna",
     "pandas",
     "pip",
     "pytest",
