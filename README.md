@@ -6,6 +6,19 @@
 
 Hi
 
+Student: Juan Sebastian Vargas (25945320)
+
+## Setup
+
+This project uses [uv](https://docs.astral.sh/uv/). `nucleus-ml` is installed from TestPyPI.
+
+```bash
+uv sync
+source .venv/bin/activate
+```
+
+`make requirements` runs the same `uv sync`.
+
 ## Project Organization
 
 ```

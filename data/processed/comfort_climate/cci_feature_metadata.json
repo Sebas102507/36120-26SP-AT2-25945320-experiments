@@ -251,6 +251,7 @@
   ],
   "snowfall_observed": true,
   "warmup_days": 30,
+  "preprocessing_pipeline": "models/preprocessing/feature_pipeline.joblib",
   "file_layout": {
     "features": "X_{split}.csv",
     "targets": "y_{split}.csv",
@@ -279,10 +280,5 @@
     "train": 2889,
     "val": 363,
     "test": 362
-  },
-  "baselines_train": {
-    "persistence_mae_t1": 6.927468594957887,
-    "persistence_mae_t2": 8.80695706415138,
-    "persistence_mae_t3": 9.520024950963423
   }
 }

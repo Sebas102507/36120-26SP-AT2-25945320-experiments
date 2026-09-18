@@ -7,9 +7,9 @@ Do not invent assignment formulas, weights, or evaluation rules. Quote them from
 ## Environment
 
 - Work inside `.venv`. Activate with `source .venv/bin/activate`.
-- Install deps from `pyproject.toml` (`pip install loguru mkdocs pandas pytest python-dotenv requests ruff tqdm typer`). `ipykernel` is already in the venv.
-- Do not recreate the venv unless asked. It currently runs Python 3.14 even though `pyproject.toml` pins `~=3.10.0`.
-- Do not `pip install -e .`. The package name starts with a digit (`36120_26sp_at2_25945320_experiments`), so an editable install fails with a SyntaxError. Import the local package by keeping the repo root on `sys.path`, or only use notebooks and scripts that do not need that import.
+- Install deps with `uv sync` (or `make requirements`). `nucleus-ml` comes from TestPyPI via `[tool.uv.sources]`.
+- Do not recreate the venv unless asked. It currently runs Python 3.14; `requires-python` is `>=3.11` because `nucleus-ml` does not support 3.10.
+- Do not install the local package (`uv sync` uses `package = false`). The package name starts with a digit (`36120_26sp_at2_25945320_experiments`), so an editable install fails with a SyntaxError. Import it by keeping the repo root on `sys.path`, or only use notebooks and scripts that do not need that import.
 
 ## Layout
 

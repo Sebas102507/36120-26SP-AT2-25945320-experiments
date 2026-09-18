@@ -251,6 +251,7 @@
   ],
   "snowfall_observed": true,
   "warmup_days": 30,
+  "preprocessing_pipeline": "models/preprocessing/feature_pipeline.joblib",
   "file_layout": {
     "features": "X_{split}.csv",
     "targets": "y_{split}.csv",
@@ -283,20 +284,20 @@
   },
   "class_counts_by_split": {
     "train": {
-      "0": 1450,
-      "1": 1315,
-      "2": 113,
+      "0": 1448,
+      "1": 1319,
+      "2": 111,
       "3": 7
     },
     "val": {
       "0": 165,
-      "1": 178,
-      "2": 16,
+      "1": 179,
+      "2": 15,
       "3": 0
     },
     "test": {
-      "0": 144,
-      "1": 194,
+      "0": 147,
+      "1": 191,
       "2": 19,
       "3": 1
     }
@@ -306,11 +307,5 @@
     "train": 2885,
     "val": 359,
     "test": 358
-  },
-  "baselines_train": {
-    "majority_class": 0,
-    "majority_class_accuracy": 0.5025996533795494,
-    "persistence_accuracy": 0.48076256499133446,
-    "monthly_mode_accuracy": 0.5625649913344888
   }
 }
