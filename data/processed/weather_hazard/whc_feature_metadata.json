@@ -1,4 +1,5 @@
 {
+  "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "location": {
     "city": "Sydney, NSW, Australia",
@@ -236,28 +237,11 @@
       "doy_cos"
     ]
   },
-  "daily_aggregations": {
-    "temperature_2m": "mean",
-    "relative_humidity_2m": "mean",
-    "wind_speed_10m": "mean",
-    "cloud_cover": "mean",
-    "precipitation": "sum",
-    "wind_gusts_10m": "max",
-    "snowfall": "sum"
-  },
   "excluded_constant_columns": [
     "snowfall",
     "snow_hazard"
   ],
-  "snowfall_observed": true,
   "warmup_days": 30,
-  "preprocessing_pipeline": "models/preprocessing/feature_pipeline.joblib",
-  "file_layout": {
-    "features": "X_{split}.csv",
-    "targets": "y_{split}.csv",
-    "index": "feature_date",
-    "note": "X and y are aligned by the feature_date index, not by row order."
-  },
   "split_boundaries": {
     "val_start": "2024-01-01",
     "test_start": "2025-01-01",
@@ -274,38 +258,11 @@
   "auxiliary_columns": [
     "whi_t7"
   ],
-  "auxiliary_file": "aux_{split}.csv",
-  "auxiliary_note": "whi_t7 is the continuous index behind the label. It is provided for error analysis only and must be dropped before fitting.",
+  "embargo_days": 7,
   "class_labels": {
     "0": "Low Risk",
     "1": "Moderate Risk",
     "2": "High Risk",
     "3": "Extreme Risk"
-  },
-  "class_counts_by_split": {
-    "train": {
-      "0": 1448,
-      "1": 1319,
-      "2": 111,
-      "3": 7
-    },
-    "val": {
-      "0": 165,
-      "1": 179,
-      "2": 15,
-      "3": 0
-    },
-    "test": {
-      "0": 147,
-      "1": 191,
-      "2": 19,
-      "3": 1
-    }
-  },
-  "embargo_days": 7,
-  "split_rows": {
-    "train": 2885,
-    "val": 359,
-    "test": 358
   }
 }

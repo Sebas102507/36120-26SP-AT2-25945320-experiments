@@ -1,4 +1,5 @@
 {
+  "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "module": "nucleus_ml.weather",
   "warmup_days": 30,
@@ -247,6 +248,5 @@
     "wind_gusts_10m": "max",
     "snowfall": "sum"
   },
-  "snowfall_observed": true,
-  "serving": "wx.features_for_date(pipeline, hourly_window, date) returns one row. The window must reach back at least 30 days before the requested date."
+  "snowfall_observed": true
 }

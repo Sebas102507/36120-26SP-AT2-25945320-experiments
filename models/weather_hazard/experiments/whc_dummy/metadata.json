@@ -1,5 +1,6 @@
 {
   "experiment": "whc_dummy",
+  "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "target": "Weather Hazard Category",
   "algorithm": "Dummy Classifier",
@@ -112,9 +113,6 @@
     "doy_cos"
   ],
   "feature_column_order_is_significant": true,
-  "best_hyperparameters": {
-    "strategy": "most_frequent"
-  },
   "split_boundaries": {
     "val_start": "2024-01-01",
     "test_start": "2025-01-01",
@@ -132,7 +130,7 @@
     {
       "target": "Weather Hazard Category",
       "target_column": "whc_t7",
-      "prediction_type": "multiclass_classification",
+      "prediction_type": "classification",
       "algorithm": "Dummy Classifier",
       "forecast_horizon": "7 Days",
       "hyperparameters": {
@@ -246,92 +244,34 @@
         "doy_cos"
       ],
       "feature_importance": {},
-      "classes_trained": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "class_names": {
-        "0": "Low Risk",
-        "1": "Moderate Risk",
-        "2": "High Risk",
-        "3": "Extreme Risk"
-      },
       "validation_metrics": {
         "accuracy": 0.4596100278551532,
         "balanced_accuracy": 0.3333333333333333,
         "macro_f1": 0.15744274809160305,
         "weighted_f1": 0.2894490633438942,
-        "macro_recall": 0.25,
-        "macro_precision": 0.1149025069637883,
-        "mean_ordinal_error": 0.584958217270195
+        "mean_ordinal_error": 0.5821727019498607
       },
-      "per_class_validation": [
-        {
-          "class": 0,
-          "category": "Low Risk",
-          "precision": 0.4596100278551532,
-          "recall": 1.0,
-          "f1": 0.6297709923664122,
-          "support": 165,
-          "predicted": 359
-        },
-        {
-          "class": 1,
-          "category": "Moderate Risk",
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 178,
-          "predicted": 0
-        },
-        {
-          "class": 2,
-          "category": "High Risk",
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 16,
-          "predicted": 0
-        },
-        {
-          "class": 3,
-          "category": "Extreme Risk",
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 0,
-          "predicted": 0
-        }
-      ],
       "baseline_metrics": {
         "majority_class": {
           "accuracy": 0.4596100278551532,
           "balanced_accuracy": 0.3333333333333333,
           "macro_f1": 0.15744274809160305,
           "weighted_f1": 0.2894490633438942,
-          "macro_recall": 0.25,
-          "macro_precision": 0.1149025069637883,
-          "mean_ordinal_error": 0.584958217270195
+          "mean_ordinal_error": 0.5821727019498607
         },
         "persistence": {
-          "accuracy": 0.42896935933147634,
-          "balanced_accuracy": 0.2982748836681421,
-          "macro_f1": 0.22357553803537183,
-          "weighted_f1": 0.42848407543505496,
-          "macro_recall": 0.22370616275110655,
-          "macro_precision": 0.22353995901639345,
-          "mean_ordinal_error": 0.6211699164345403
+          "accuracy": 0.4428969359331476,
+          "balanced_accuracy": 0.3069917047570679,
+          "macro_f1": 0.2301376131240891,
+          "weighted_f1": 0.4424850992444279,
+          "mean_ordinal_error": 0.6072423398328691
         },
         "seasonal_mode": {
-          "accuracy": 0.5487465181058496,
-          "balanced_accuracy": 0.385291113381001,
-          "macro_f1": 0.27956492970747526,
-          "weighted_f1": 0.5332463906020299,
-          "macro_recall": 0.28896833503575076,
-          "macro_precision": 0.2779487592652272,
-          "mean_ordinal_error": 0.4818941504178273
+          "accuracy": 0.5515320334261838,
+          "balanced_accuracy": 0.3862535974267818,
+          "macro_f1": 0.28069725398221446,
+          "weighted_f1": 0.5369880394060725,
+          "mean_ordinal_error": 0.479108635097493
         }
       }
     }
@@ -342,18 +282,7 @@
     "2": "High Risk",
     "3": "Extreme Risk"
   },
-  "optimisation": {
-    "library": null,
-    "method": "none - fixed majority-class rule",
-    "strategy": "most_frequent",
-    "objective": "validation macro-averaged F1 over classes seen in training",
-    "classes_averaged": [
-      0,
-      1,
-      2,
-      3
-    ],
-    "note": "A majority-class null model has nothing to tune. It is fixed rather than selected so that the floor it establishes is a fixed property of the label distribution, not an artefact of searching the validation split."
-  },
-  "class_imbalance_note": "Accuracy is not a meaningful selection metric for this target; macro F1 and the confusion matrix are the reportable results."
+  "selection": "fixed default parameters (no search)",
+  "selection_metric": "validation macro_f1",
+  "seed_stability": []
 }

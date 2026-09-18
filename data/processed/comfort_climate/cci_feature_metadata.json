@@ -1,4 +1,5 @@
 {
+  "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "location": {
     "city": "Sydney, NSW, Australia",
@@ -236,28 +237,11 @@
       "doy_cos"
     ]
   },
-  "daily_aggregations": {
-    "temperature_2m": "mean",
-    "relative_humidity_2m": "mean",
-    "wind_speed_10m": "mean",
-    "cloud_cover": "mean",
-    "precipitation": "sum",
-    "wind_gusts_10m": "max",
-    "snowfall": "sum"
-  },
   "excluded_constant_columns": [
     "snowfall",
     "snow_hazard"
   ],
-  "snowfall_observed": true,
   "warmup_days": 30,
-  "preprocessing_pipeline": "models/preprocessing/feature_pipeline.joblib",
-  "file_layout": {
-    "features": "X_{split}.csv",
-    "targets": "y_{split}.csv",
-    "index": "feature_date",
-    "note": "X and y are aligned by the feature_date index, not by row order."
-  },
   "split_boundaries": {
     "val_start": "2024-01-01",
     "test_start": "2025-01-01",
@@ -275,10 +259,5 @@
     "cci_t2",
     "cci_t3"
   ],
-  "embargo_days": 3,
-  "split_rows": {
-    "train": 2889,
-    "val": 363,
-    "test": 362
-  }
+  "embargo_days": 3
 }

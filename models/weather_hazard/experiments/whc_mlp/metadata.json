@@ -1,5 +1,6 @@
 {
   "experiment": "whc_mlp",
+  "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "target": "Weather Hazard Category",
   "algorithm": "MLP Classifier",
@@ -112,13 +113,6 @@
     "doy_cos"
   ],
   "feature_column_order_is_significant": true,
-  "best_hyperparameters": {
-    "n_layers": "1",
-    "units": "29",
-    "alpha": "3.0974900421285513e-06",
-    "learning_rate_init": "0.0041031207695735325",
-    "activation": "tanh"
-  },
   "split_boundaries": {
     "val_start": "2024-01-01",
     "test_start": "2025-01-01",
@@ -136,15 +130,15 @@
     {
       "target": "Weather Hazard Category",
       "target_column": "whc_t7",
-      "prediction_type": "multiclass_classification",
+      "prediction_type": "classification",
       "algorithm": "MLP Classifier",
       "forecast_horizon": "7 Days",
       "hyperparameters": {
-        "n_layers": 1,
-        "units": 29,
-        "alpha": 3.0974900421285513e-06,
-        "learning_rate_init": 0.0041031207695735325,
-        "activation": "tanh"
+        "n_layers": 2,
+        "units": 217,
+        "alpha": 0.0015210700649681728,
+        "learning_rate_init": 0.01273859224519556,
+        "activation": "relu"
       },
       "features": [
         "temperature_2m",
@@ -254,113 +248,55 @@
         "doy_cos"
       ],
       "feature_importance": {
-        "wind_gusts_10m_lag3": 0.04977408868325426,
-        "cci_roll30_mean": 0.04626469250935793,
-        "temp_hazard": 0.0454234822672421,
-        "cloud_score": 0.044937923128474354,
-        "temperature_2m_roll14_mean": 0.043501616294244136,
-        "cci_delta1": 0.04202138081083516,
-        "temp_score": 0.040507248691256034,
-        "temperature_2m_roll7_mean": 0.040151388519062824,
-        "wind_gusts_10m_roll7_max": 0.03995800044531602,
-        "cci_roll14_mean": 0.03909906167922207,
-        "cloud_cover": 0.039013804315536214,
-        "wind_gusts_10m_roll3_max": 0.038052780868030524,
-        "temperature_2m_roll30_mean": 0.037999099833021376,
-        "whi_roll14_std": 0.03749708052104911,
-        "cci_roll3_std": 0.03741208135584303,
-        "relative_humidity_2m_lag7": 0.03703824860978104,
-        "whi_lag3": 0.03689782272751441,
-        "temperature_2m_lag3": 0.03687977522448118,
-        "whi_roll14_mean": 0.036711155295418366,
-        "temperature_2m_roll3_mean": 0.03670717551095248
-      },
-      "classes_trained": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "class_names": {
-        "0": "Low Risk",
-        "1": "Moderate Risk",
-        "2": "High Risk",
-        "3": "Extreme Risk"
+        "whi_roll3_std": 0.01470379284193618,
+        "cloud_cover_roll7_std": 0.010692934638822371,
+        "cloud_cover_roll14_std": 0.008576633217310526,
+        "relative_humidity_2m_roll30_std": 0.0067695471764601224,
+        "precipitation_roll14_sum": 0.006533656917653452,
+        "rain_score": 0.006155932155248567,
+        "relative_humidity_2m": 0.005497972137444906,
+        "wind_hazard": 0.005400848332481567,
+        "temperature_2m_roll3_std": 0.005278659540148678,
+        "cci_roll14_mean": 0.005132726613617,
+        "whi_roll14_std": 0.004930555242484635,
+        "cci_roll3_mean": 0.004811172588370272,
+        "cloud_cover_roll14_mean": 0.0041437573589167,
+        "temp_score": 0.0038838975276322073,
+        "wind_speed_10m_lag7": 0.003794269778777204,
+        "wind_gusts_10m_roll14_max": 0.003784680529650286,
+        "relative_humidity_2m_roll14_std": 0.0037210724652473994,
+        "temperature_2m_lag7": 0.0037121109463330026,
+        "precipitation_roll3_sum": 0.003443810318697338,
+        "precipitation_lag1": 0.0034255982462896295
       },
       "validation_metrics": {
-        "accuracy": 0.5236768802228412,
-        "balanced_accuracy": 0.3862175122006583,
-        "macro_f1": 0.2942674184806364,
-        "weighted_f1": 0.5134247276518951,
-        "macro_recall": 0.2896631341504937,
-        "macro_precision": 0.3893961352657005,
-        "mean_ordinal_error": 0.5069637883008357
+        "accuracy": 0.5264623955431755,
+        "balanced_accuracy": 0.3674397607358501,
+        "macro_f1": 0.2687641723356009,
+        "weighted_f1": 0.5147992344570139,
+        "mean_ordinal_error": 0.4986072423398329
       },
-      "per_class_validation": [
-        {
-          "class": 0,
-          "category": "Low Risk",
-          "precision": 0.4975845410628019,
-          "recall": 0.6242424242424243,
-          "f1": 0.553763440860215,
-          "support": 165,
-          "predicted": 207
-        },
-        {
-          "class": 1,
-          "category": "Moderate Risk",
-          "precision": 0.56,
-          "recall": 0.47191011235955055,
-          "f1": 0.5121951219512195,
-          "support": 178,
-          "predicted": 150
-        },
-        {
-          "class": 2,
-          "category": "High Risk",
-          "precision": 0.5,
-          "recall": 0.0625,
-          "f1": 0.1111111111111111,
-          "support": 16,
-          "predicted": 2
-        },
-        {
-          "class": 3,
-          "category": "Extreme Risk",
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
-          "support": 0,
-          "predicted": 0
-        }
-      ],
       "baseline_metrics": {
         "majority_class": {
           "accuracy": 0.4596100278551532,
           "balanced_accuracy": 0.3333333333333333,
           "macro_f1": 0.15744274809160305,
           "weighted_f1": 0.2894490633438942,
-          "macro_recall": 0.25,
-          "macro_precision": 0.1149025069637883,
-          "mean_ordinal_error": 0.584958217270195
+          "mean_ordinal_error": 0.5821727019498607
         },
         "persistence": {
-          "accuracy": 0.42896935933147634,
-          "balanced_accuracy": 0.2982748836681421,
-          "macro_f1": 0.22357553803537183,
-          "weighted_f1": 0.42848407543505496,
-          "macro_recall": 0.22370616275110655,
-          "macro_precision": 0.22353995901639345,
-          "mean_ordinal_error": 0.6211699164345403
+          "accuracy": 0.4428969359331476,
+          "balanced_accuracy": 0.3069917047570679,
+          "macro_f1": 0.2301376131240891,
+          "weighted_f1": 0.4424850992444279,
+          "mean_ordinal_error": 0.6072423398328691
         },
         "seasonal_mode": {
-          "accuracy": 0.5487465181058496,
-          "balanced_accuracy": 0.385291113381001,
-          "macro_f1": 0.27956492970747526,
-          "weighted_f1": 0.5332463906020299,
-          "macro_recall": 0.28896833503575076,
-          "macro_precision": 0.2779487592652272,
-          "mean_ordinal_error": 0.4818941504178273
+          "accuracy": 0.5515320334261838,
+          "balanced_accuracy": 0.3862535974267818,
+          "macro_f1": 0.28069725398221446,
+          "weighted_f1": 0.5369880394060725,
+          "mean_ordinal_error": 0.479108635097493
         }
       }
     }
@@ -371,27 +307,15 @@
     "2": "High Risk",
     "3": "Extreme Risk"
   },
-  "optimisation": {
-    "library": "optuna",
-    "objective": "validation macro-averaged F1 over classes seen in training",
-    "direction": "maximize",
-    "trials_per_study": 20,
-    "classes_averaged": [
-      0,
-      1,
-      2,
-      3
-    ]
-  },
+  "selection": "optuna (TPE)",
+  "selection_metric": "validation macro_f1",
   "seed_stability": [
     {
       "target": "whc_t7",
-      "best_trial_macro_f1": 0.2942674184806364,
-      "seed_mean": 0.2721030964068784,
-      "seed_spread": 0.03475654891541902,
-      "top10_trial_spread": 0.03528987149021734,
-      "search_beats_noise": true
+      "seed_mean": 0.24160403033195385,
+      "seed_spread": 0.045917236074030476,
+      "top10_search_spread": 0.013223938721064865,
+      "search_beats_noise": false
     }
-  ],
-  "class_imbalance_note": "Accuracy is not a meaningful selection metric for this target; macro F1 and the confusion matrix are the reportable results."
+  ]
 }
