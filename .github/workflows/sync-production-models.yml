@@ -18,10 +18,16 @@ on:
       - "models/preprocessing/**"
       - "models/comfort_climate/production/**"
       - "models/weather_hazard/production/**"
+      - ".github/workflows/sync-production-models.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# Never run two syncs at once: they would push competing commits to the API repository.
+concurrency:
+  group: sync-production-models
+  cancel-in-progress: false
 
 jobs:
   sync-production-models:
@@ -37,9 +43,17 @@ jobs:
 
       - name: Check that every artefact exists
         run: |
+          # The API refuses to start a bundle that lacks a horizon, so fail here instead.
           test -f models/preprocessing/feature_pipeline.joblib
-          test -f models/comfort_climate/production/manifest.json
-          test -f models/weather_hazard/production/manifest.json
+          for horizon in 1 2 3; do
+            ls models/comfort_climate/production/*_h${horizon}.joblib
+          done
+          ls models/weather_hazard/production/*_h7.joblib
+          for bundle in comfort_climate weather_hazard; do
+            for file in manifest.json metadata.json drift_reference.json; do
+              test -f "models/${bundle}/production/${file}"
+            done
+          done
 
       - name: Check out API repository
         uses: actions/checkout@v4
@@ -52,8 +66,10 @@ jobs:
       - name: Replace API models with production artefacts
         run: |
           destination="api-repository/${API_MODEL_DIRECTORY}"
-          # Start from an empty folder so a previous champion's files cannot linger.
-          rm -rf "$destination"
+          # Replace the three artefact folders so a previous champion's files cannot linger;
+          # anything else in models/ (its README) is kept.
+          rm -rf "$destination/preprocessing" "$destination/comfort_climate" \
+            "$destination/weather_hazard"
           mkdir -p "$destination"
 
           rsync -av --exclude=".gitkeep" models/preprocessing/ "$destination/preprocessing/"
