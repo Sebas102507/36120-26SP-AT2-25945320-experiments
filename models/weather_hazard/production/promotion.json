@@ -1,71 +1,151 @@
 {
-  "promoted_at": "2026-09-18T15:03:58.060264+00:00",
+  "promoted_at": "2026-09-19T08:47:17.059774+00:00",
   "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "task": "weather_hazard",
   "target": "Weather Hazard Category",
   "selected_experiment": "whc_random_forest",
-  "selection_rule": "best mean validation macro_f1, fixed before viewing results",
-  "selection_data": "validation split only; the test split informed no decision",
-  "runner_up": "whc_xgboost",
-  "margin_over_runner_up": 0.0029519513330832914,
-  "typical_seed_spread": 0.02320813472943399,
-  "validation_ranking": [
+  "pipeline": {
+    "1-2 experiments": "baselines, ablation and hyperparameter tuning on all features, scored by walk-forward CV on the development split",
+    "3 shortlist": "best tuned algorithms by mean CV macro_f1",
+    "4 feature selection": "optuna (TPE) on 4-fold walk-forward CV; hyperparameters tuned on all features; feature families selected with settings fixed, then re-tuned",
+    "5 champion": "best mean macro_f1 over the walk-forward CV folds",
+    "6 final fit": "chosen configuration refitted on all development data",
+    "7 test": "scored once, after the champion was fixed",
+    "8 deploy": "production bundle with a drift reference for monitoring"
+  },
+  "screening_ranking": [
     {
       "experiment": "whc_random_forest",
-      "whc_t7": 0.28837297919605653,
-      "score": 0.28837297919605653,
-      "is_baseline": false,
-      "predicted_classes": 2
-    },
-    {
-      "experiment": "whc_xgboost",
-      "whc_t7": 0.28542102786297324,
-      "score": 0.28542102786297324,
-      "is_baseline": false,
-      "predicted_classes": 2
+      "whc_t7": 0.27435012085596155,
+      "score": 0.27435012085596155,
+      "is_baseline": false
     },
     {
       "experiment": "seasonal_mode",
-      "whc_t7": 0.28069725398221446,
-      "score": 0.28069725398221446,
-      "is_baseline": true,
-      "predicted_classes": 2
-    },
-    {
-      "experiment": "whc_logistic_regression",
-      "whc_t7": 0.2705399499329212,
-      "score": 0.2705399499329212,
-      "is_baseline": false,
-      "predicted_classes": 4
+      "whc_t7": 0.274152021919102,
+      "score": 0.274152021919102,
+      "is_baseline": true
     },
     {
       "experiment": "whc_mlp",
-      "whc_t7": 0.2687641723356009,
-      "score": 0.2687641723356009,
-      "is_baseline": false,
-      "predicted_classes": 2
+      "whc_t7": 0.2643274071517991,
+      "score": 0.2643274071517991,
+      "is_baseline": false
+    },
+    {
+      "experiment": "whc_xgboost",
+      "whc_t7": 0.2584138991444998,
+      "score": 0.2584138991444998,
+      "is_baseline": false
+    },
+    {
+      "experiment": "whc_logistic_regression",
+      "whc_t7": 0.2552492169934991,
+      "score": 0.2552492169934991,
+      "is_baseline": false
     },
     {
       "experiment": "persistence",
-      "whc_t7": 0.2301376131240891,
-      "score": 0.2301376131240891,
-      "is_baseline": true,
-      "predicted_classes": 3
+      "whc_t7": 0.25459516195765414,
+      "score": 0.25459516195765414,
+      "is_baseline": true
     },
     {
       "experiment": "majority_class",
-      "whc_t7": 0.15744274809160305,
-      "score": 0.15744274809160305,
-      "is_baseline": true,
-      "predicted_classes": 1
+      "whc_t7": 0.161197670024891,
+      "score": 0.161197670024891,
+      "is_baseline": true
     },
     {
       "experiment": "whc_dummy",
-      "whc_t7": 0.15744274809160305,
-      "score": 0.15744274809160305,
-      "is_baseline": false,
-      "predicted_classes": 1
+      "whc_t7": 0.161197670024891,
+      "score": 0.161197670024891,
+      "is_baseline": false
+    }
+  ],
+  "shortlist": [
+    {
+      "experiment": "whc_random_forest",
+      "screening_score": 0.27435012085596155,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "whc_mlp",
+      "screening_score": 0.2643274071517991,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "whc_xgboost",
+      "screening_score": 0.2584138991444998,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "whc_logistic_regression",
+      "screening_score": 0.2552492169934991,
+      "status": "not shortlisted"
+    },
+    {
+      "experiment": "whc_dummy",
+      "screening_score": 0.161197670024891,
+      "status": "excluded: null model"
+    }
+  ],
+  "refinement_ranking": [
+    {
+      "experiment": "whc_random_forest",
+      "whc_t7": 0.24890342024934514,
+      "score": 0.24890342024934514,
+      "typical_fold_std": 0.00238381484078185,
+      "mean_features": 11.0
+    },
+    {
+      "experiment": "whc_xgboost",
+      "whc_t7": 0.23738904114969506,
+      "score": 0.23738904114969506,
+      "typical_fold_std": 0.022838154574411164,
+      "mean_features": 11.0
+    },
+    {
+      "experiment": "whc_mlp",
+      "whc_t7": 0.21781586985552254,
+      "score": 0.21781586985552254,
+      "typical_fold_std": 0.010933785915671972,
+      "mean_features": 11.0
+    }
+  ],
+  "runner_up": "whc_xgboost",
+  "margin_over_runner_up": 0.011514379099650085,
+  "typical_fold_std": 0.00238381484078185,
+  "refined_configuration": [
+    {
+      "target": "whc_t7",
+      "cv_mean": 0.24890342024934514,
+      "cv_std": 0.00238381484078185,
+      "fold_scores": [
+        0.2517,
+        0.2486,
+        0.2494,
+        0.2459
+      ],
+      "n_features": 11,
+      "dropped_families": [
+        "same_day_observations",
+        "same_day_indices",
+        "lags",
+        "rolling_statistics",
+        "rolling_gusts",
+        "seasonal"
+      ],
+      "retuned": false,
+      "best_params": {
+        "n_estimators": 500,
+        "max_depth": 10,
+        "min_samples_leaf": 11,
+        "min_samples_split": 21,
+        "max_features": 0.6673398348012853,
+        "class_weight": "balanced_subsample"
+      }
     }
   ],
   "test_metrics": [
@@ -73,12 +153,12 @@
       "target": "whc_t7",
       "experiment": "whc_random_forest",
       "is_baseline": false,
-      "accuracy": 0.5446927374301676,
-      "balanced_accuracy": 0.28383552373829113,
-      "macro_f1": 0.27569283821859625,
-      "weighted_f1": 0.5287350159440716,
-      "mean_ordinal_error": 0.49162011173184356,
-      "predicted_classes": 2
+      "accuracy": 0.4860335195530726,
+      "balanced_accuracy": 0.25203903550949175,
+      "macro_f1": 0.24578766423854587,
+      "weighted_f1": 0.47304285766987875,
+      "mean_ordinal_error": 0.547486033519553,
+      "predicted_classes": 3
     },
     {
       "target": "whc_t7",
@@ -114,125 +194,6 @@
       "predicted_classes": 2
     }
   ],
-  "source_bundle": "models/weather_hazard/experiments/whc_random_forest",
-  "feature_columns": [
-    "temperature_2m",
-    "relative_humidity_2m",
-    "wind_speed_10m",
-    "cloud_cover",
-    "precipitation",
-    "wind_gusts_10m",
-    "temp_score",
-    "humidity_score",
-    "wind_score",
-    "cloud_score",
-    "rain_score",
-    "cci",
-    "rain_hazard",
-    "wind_hazard",
-    "cloud_hazard",
-    "temp_hazard",
-    "whi",
-    "temperature_2m_lag1",
-    "temperature_2m_lag2",
-    "temperature_2m_lag3",
-    "temperature_2m_lag7",
-    "relative_humidity_2m_lag1",
-    "relative_humidity_2m_lag2",
-    "relative_humidity_2m_lag3",
-    "relative_humidity_2m_lag7",
-    "wind_speed_10m_lag1",
-    "wind_speed_10m_lag2",
-    "wind_speed_10m_lag3",
-    "wind_speed_10m_lag7",
-    "cloud_cover_lag1",
-    "cloud_cover_lag2",
-    "cloud_cover_lag3",
-    "cloud_cover_lag7",
-    "precipitation_lag1",
-    "precipitation_lag2",
-    "precipitation_lag3",
-    "precipitation_lag7",
-    "wind_gusts_10m_lag1",
-    "wind_gusts_10m_lag2",
-    "wind_gusts_10m_lag3",
-    "wind_gusts_10m_lag7",
-    "cci_lag1",
-    "cci_lag2",
-    "cci_lag3",
-    "cci_lag7",
-    "whi_lag1",
-    "whi_lag2",
-    "whi_lag3",
-    "whi_lag7",
-    "temperature_2m_roll3_mean",
-    "temperature_2m_roll3_std",
-    "temperature_2m_roll7_mean",
-    "temperature_2m_roll7_std",
-    "temperature_2m_roll14_mean",
-    "temperature_2m_roll14_std",
-    "temperature_2m_roll30_mean",
-    "temperature_2m_roll30_std",
-    "relative_humidity_2m_roll3_mean",
-    "relative_humidity_2m_roll3_std",
-    "relative_humidity_2m_roll7_mean",
-    "relative_humidity_2m_roll7_std",
-    "relative_humidity_2m_roll14_mean",
-    "relative_humidity_2m_roll14_std",
-    "relative_humidity_2m_roll30_mean",
-    "relative_humidity_2m_roll30_std",
-    "cloud_cover_roll3_mean",
-    "cloud_cover_roll3_std",
-    "cloud_cover_roll7_mean",
-    "cloud_cover_roll7_std",
-    "cloud_cover_roll14_mean",
-    "cloud_cover_roll14_std",
-    "cloud_cover_roll30_mean",
-    "cloud_cover_roll30_std",
-    "cci_roll3_mean",
-    "cci_roll3_std",
-    "cci_roll7_mean",
-    "cci_roll7_std",
-    "cci_roll14_mean",
-    "cci_roll14_std",
-    "cci_roll30_mean",
-    "cci_roll30_std",
-    "whi_roll3_mean",
-    "whi_roll3_std",
-    "whi_roll7_mean",
-    "whi_roll7_std",
-    "whi_roll14_mean",
-    "whi_roll14_std",
-    "whi_roll30_mean",
-    "whi_roll30_std",
-    "precipitation_roll3_sum",
-    "precipitation_roll7_sum",
-    "precipitation_roll14_sum",
-    "precipitation_roll30_sum",
-    "wind_gusts_10m_roll3_max",
-    "wind_gusts_10m_roll7_max",
-    "wind_gusts_10m_roll14_max",
-    "wind_gusts_10m_roll30_max",
-    "temperature_2m_delta1",
-    "temperature_2m_delta3",
-    "cci_delta1",
-    "cci_delta3",
-    "whi_delta1",
-    "whi_delta3",
-    "doy_sin",
-    "doy_cos"
-  ],
-  "feature_column_order_is_significant": true,
   "history_days": 30,
-  "compared_experiments": [
-    "whc_dummy",
-    "whc_logistic_regression",
-    "whc_mlp",
-    "whc_random_forest",
-    "whc_xgboost"
-  ],
-  "excluded_experiments": [],
-  "warnings": [
-    "Margin over whc_xgboost (0.0030) is within the typical seed spread (0.0232); the top two are not clearly separated."
-  ]
+  "warnings": []
 }

@@ -1,100 +1,244 @@
 {
-  "promoted_at": "2026-09-18T14:45:37.261945+00:00",
+  "promoted_at": "2026-09-19T03:22:15.183851+00:00",
   "student_name": "Juan Vargas T.",
   "student_id": "25945320",
   "task": "comfort_climate",
   "target": "Climate Comfort Index",
-  "selected_experiment": "cci_polynomial_regression",
-  "selection_rule": "best mean validation mae, fixed before viewing results",
-  "selection_data": "validation split only; the test split informed no decision",
-  "runner_up": "cci_random_forest",
-  "margin_over_runner_up": 0.07035891375942427,
-  "typical_seed_spread": 0.08671623966566873,
-  "validation_ranking": [
+  "selected_experiment": "cci_random_forest",
+  "pipeline": {
+    "1-2 experiments": "baselines, ablation and hyperparameter tuning on all features, scored by walk-forward CV on the development split",
+    "3 shortlist": "best tuned algorithms by mean CV mae",
+    "4 feature selection": "optuna (TPE) on 4-fold walk-forward CV; hyperparameters tuned on all features; feature families selected with settings fixed, then re-tuned",
+    "5 champion": "best mean mae over the walk-forward CV folds",
+    "6 final fit": "chosen configuration refitted on all development data",
+    "7 test": "scored once, after the champion was fixed",
+    "8 deploy": "production bundle with a drift reference for monitoring"
+  },
+  "screening_ranking": [
     {
       "experiment": "cci_polynomial_regression",
-      "cci_t1": 6.280527605555248,
-      "cci_t2": 6.889114170703407,
-      "cci_t3": 7.085115478934274,
-      "score": 6.751585751730976,
+      "cci_t1": 6.312149939493697,
+      "cci_t2": 7.33648896277411,
+      "cci_t3": 7.535877873441644,
+      "score": 7.06150559190315,
       "is_baseline": false
     },
     {
       "experiment": "cci_random_forest",
-      "cci_t1": 6.277625929013609,
-      "cci_t2": 6.9929377149836025,
-      "cci_t3": 7.195270352473989,
-      "score": 6.8219446654904,
+      "cci_t1": 6.308964922542257,
+      "cci_t2": 7.354718434802906,
+      "cci_t3": 7.558932128023795,
+      "score": 7.074205161789653,
       "is_baseline": false
     },
     {
       "experiment": "cci_xgboost",
-      "cci_t1": 6.253994835261466,
-      "cci_t2": 7.0403824338088645,
-      "cci_t3": 7.2902475952947725,
-      "score": 6.861541621455035,
-      "is_baseline": false
-    },
-    {
-      "experiment": "cci_mlp",
-      "cci_t1": 6.6726457221204,
-      "cci_t2": 7.015993158871254,
-      "cci_t3": 7.148202330340262,
-      "score": 6.945613737110638,
+      "cci_t1": 6.321681342227975,
+      "cci_t2": 7.359067075322908,
+      "cci_t3": 7.585639552062662,
+      "score": 7.0887959898711825,
       "is_baseline": false
     },
     {
       "experiment": "climatology",
-      "cci_t1": 7.588490921763515,
-      "cci_t2": 7.599845122592146,
-      "cci_t3": 7.609687328471284,
-      "score": 7.599341124275649,
-      "is_baseline": true
-    },
-    {
-      "experiment": "persistence",
-      "cci_t1": 7.531405205713259,
-      "cci_t2": 8.590837597816105,
-      "cci_t3": 9.152212712600312,
-      "score": 8.424818505376559,
+      "cci_t1": 7.830919464520633,
+      "cci_t2": 7.831336352646222,
+      "cci_t3": 7.829553418997829,
+      "score": 7.830603078721562,
       "is_baseline": true
     },
     {
       "experiment": "cci_dummy_mean",
-      "cci_t1": 8.725017967823987,
-      "cci_t2": 8.73725077371416,
-      "cci_t3": 8.749551495082635,
-      "score": 8.737273412206926,
+      "cci_t1": 8.340081272721992,
+      "cci_t2": 8.3452729010502,
+      "cci_t3": 8.34681188971463,
+      "score": 8.344055354495607,
       "is_baseline": false
+    },
+    {
+      "experiment": "persistence",
+      "cci_t1": 7.2395020337006155,
+      "cci_t2": 9.069497396763948,
+      "cci_t3": 9.9166604396218,
+      "score": 8.741886623362122,
+      "is_baseline": true
+    },
+    {
+      "experiment": "cci_mlp",
+      "cci_t1": 7.931770456521112,
+      "cci_t2": 9.253271748784066,
+      "cci_t3": 9.452444200318107,
+      "score": 8.879162135207762,
+      "is_baseline": false
+    }
+  ],
+  "shortlist": [
+    {
+      "experiment": "cci_polynomial_regression",
+      "screening_score": 7.06150559190315,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "cci_random_forest",
+      "screening_score": 7.074205161789653,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "cci_xgboost",
+      "screening_score": 7.0887959898711825,
+      "status": "shortlisted"
+    },
+    {
+      "experiment": "cci_dummy_mean",
+      "screening_score": 8.344055354495607,
+      "status": "excluded: null model"
+    },
+    {
+      "experiment": "cci_mlp",
+      "screening_score": 8.879162135207762,
+      "status": "not shortlisted"
+    }
+  ],
+  "refinement_ranking": [
+    {
+      "experiment": "cci_random_forest",
+      "cci_t1": 6.405517947038611,
+      "cci_t2": 7.395426732199275,
+      "cci_t3": 7.690343388724514,
+      "score": 7.163762689320801,
+      "typical_fold_std": 0.2869542406405271,
+      "mean_features": 41.666666666666664
+    },
+    {
+      "experiment": "cci_xgboost",
+      "cci_t1": 6.518756655987696,
+      "cci_t2": 7.583956860532112,
+      "cci_t3": 7.813515504587342,
+      "score": 7.305409673702383,
+      "typical_fold_std": 0.2904015522897841,
+      "mean_features": 11.0
+    },
+    {
+      "experiment": "cci_polynomial_regression",
+      "cci_t1": 6.5135412437123925,
+      "cci_t2": 7.955393998065938,
+      "cci_t3": 8.099054052527107,
+      "score": 7.5226630981018126,
+      "typical_fold_std": 0.36685840535351516,
+      "mean_features": 11.0
+    }
+  ],
+  "runner_up": "cci_xgboost",
+  "margin_over_runner_up": 0.14164698438158219,
+  "typical_fold_std": 0.2869542406405271,
+  "refined_configuration": [
+    {
+      "target": "cci_t1",
+      "cv_mean": 6.405517947038611,
+      "cv_std": 0.16830753665934675,
+      "fold_scores": [
+        6.3729,
+        6.6241,
+        6.2155,
+        6.4095
+      ],
+      "n_features": 47,
+      "dropped_families": [
+        "same_day_observations",
+        "same_day_indices",
+        "lags",
+        "rolling_precipitation",
+        "rolling_gusts",
+        "seasonal"
+      ],
+      "retuned": false,
+      "best_params": {
+        "n_estimators": 400,
+        "max_depth": 16,
+        "min_samples_leaf": 13,
+        "min_samples_split": 12,
+        "max_features": 0.4443804469324341
+      }
+    },
+    {
+      "target": "cci_t2",
+      "cv_mean": 7.395426732199275,
+      "cv_std": 0.31712778615495035,
+      "fold_scores": [
+        7.3641,
+        7.817,
+        7.3534,
+        7.0472
+      ],
+      "n_features": 61,
+      "dropped_families": [
+        "same_day_observations",
+        "lags",
+        "deltas"
+      ],
+      "retuned": false,
+      "best_params": {
+        "n_estimators": 600,
+        "max_depth": 6,
+        "min_samples_leaf": 3,
+        "min_samples_split": 3,
+        "max_features": 0.26234293994495705
+      }
+    },
+    {
+      "target": "cci_t3",
+      "cv_mean": 7.690343388724514,
+      "cv_std": 0.37542739910728423,
+      "fold_scores": [
+        7.5747,
+        8.2445,
+        7.415,
+        7.5272
+      ],
+      "n_features": 17,
+      "dropped_families": [
+        "same_day_indices",
+        "lags",
+        "rolling_statistics",
+        "deltas"
+      ],
+      "retuned": false,
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 10,
+        "min_samples_leaf": 1,
+        "min_samples_split": 31,
+        "max_features": 0.06311733016755355
+      }
     }
   ],
   "test_metrics": [
     {
       "target": "cci_t1",
-      "experiment": "cci_polynomial_regression",
+      "experiment": "cci_random_forest",
       "is_baseline": false,
-      "mae": 6.782337774570436,
-      "rmse": 8.949408059507647,
-      "r2": 0.4176594720119794,
-      "pred_std": 7.557018562488994
+      "mae": 6.792721711322044,
+      "rmse": 8.98531208890726,
+      "r2": 0.4129775282838344,
+      "pred_std": 6.847617877665817
     },
     {
       "target": "cci_t2",
-      "experiment": "cci_polynomial_regression",
+      "experiment": "cci_random_forest",
       "is_baseline": false,
-      "mae": 7.666059069427516,
-      "rmse": 10.087550404164718,
-      "r2": 0.26193917327843197,
-      "pred_std": 5.3659339234814
+      "mae": 7.736551117925149,
+      "rmse": 10.083086625833522,
+      "r2": 0.26259221804557775,
+      "pred_std": 5.10792977195405
     },
     {
       "target": "cci_t3",
-      "experiment": "cci_polynomial_regression",
+      "experiment": "cci_random_forest",
       "is_baseline": false,
-      "mae": 7.850651132579633,
-      "rmse": 10.37275086195391,
-      "r2": 0.21912070647217397,
-      "pred_std": 4.854041445837338
+      "mae": 8.16249807159086,
+      "rmse": 10.553608763834008,
+      "r2": 0.19165269716550726,
+      "pred_std": 3.4355940003678023
     },
     {
       "target": "cci_t1",
@@ -109,10 +253,10 @@
       "target": "cci_t1",
       "experiment": "climatology",
       "is_baseline": true,
-      "mae": 8.238244125246885,
-      "rmse": 10.789290275142713,
-      "r2": 0.153602933582068,
-      "pred_std": 3.728070221508444
+      "mae": 8.14154445396903,
+      "rmse": 10.669042021232151,
+      "r2": 0.17236424272092832,
+      "pred_std": 3.8750088148055433
     },
     {
       "target": "cci_t2",
@@ -127,10 +271,10 @@
       "target": "cci_t2",
       "experiment": "climatology",
       "is_baseline": true,
-      "mae": 8.255722497509119,
-      "rmse": 10.794297461461438,
-      "r2": 0.15489731102532645,
-      "pred_std": 3.7277836860629963
+      "mae": 8.156421572685353,
+      "rmse": 10.672964295974893,
+      "r2": 0.1737892659104292,
+      "pred_std": 3.8754786285834744
     },
     {
       "target": "cci_t3",
@@ -145,131 +289,14 @@
       "target": "cci_t3",
       "experiment": "climatology",
       "is_baseline": true,
-      "mae": 8.256582105452203,
-      "rmse": 10.794871826719191,
-      "r2": 0.15427144706232798,
-      "pred_std": 3.727251327253715
+      "mae": 8.15854605206517,
+      "rmse": 10.673619269383808,
+      "r2": 0.17316390401785686,
+      "pred_std": 3.8800815963829214
     }
   ],
-  "source_bundle": "models/comfort_climate/experiments/cci_polynomial_regression",
-  "feature_columns": [
-    "temperature_2m",
-    "relative_humidity_2m",
-    "wind_speed_10m",
-    "cloud_cover",
-    "precipitation",
-    "wind_gusts_10m",
-    "temp_score",
-    "humidity_score",
-    "wind_score",
-    "cloud_score",
-    "rain_score",
-    "cci",
-    "rain_hazard",
-    "wind_hazard",
-    "cloud_hazard",
-    "temp_hazard",
-    "whi",
-    "temperature_2m_lag1",
-    "temperature_2m_lag2",
-    "temperature_2m_lag3",
-    "temperature_2m_lag7",
-    "relative_humidity_2m_lag1",
-    "relative_humidity_2m_lag2",
-    "relative_humidity_2m_lag3",
-    "relative_humidity_2m_lag7",
-    "wind_speed_10m_lag1",
-    "wind_speed_10m_lag2",
-    "wind_speed_10m_lag3",
-    "wind_speed_10m_lag7",
-    "cloud_cover_lag1",
-    "cloud_cover_lag2",
-    "cloud_cover_lag3",
-    "cloud_cover_lag7",
-    "precipitation_lag1",
-    "precipitation_lag2",
-    "precipitation_lag3",
-    "precipitation_lag7",
-    "wind_gusts_10m_lag1",
-    "wind_gusts_10m_lag2",
-    "wind_gusts_10m_lag3",
-    "wind_gusts_10m_lag7",
-    "cci_lag1",
-    "cci_lag2",
-    "cci_lag3",
-    "cci_lag7",
-    "whi_lag1",
-    "whi_lag2",
-    "whi_lag3",
-    "whi_lag7",
-    "temperature_2m_roll3_mean",
-    "temperature_2m_roll3_std",
-    "temperature_2m_roll7_mean",
-    "temperature_2m_roll7_std",
-    "temperature_2m_roll14_mean",
-    "temperature_2m_roll14_std",
-    "temperature_2m_roll30_mean",
-    "temperature_2m_roll30_std",
-    "relative_humidity_2m_roll3_mean",
-    "relative_humidity_2m_roll3_std",
-    "relative_humidity_2m_roll7_mean",
-    "relative_humidity_2m_roll7_std",
-    "relative_humidity_2m_roll14_mean",
-    "relative_humidity_2m_roll14_std",
-    "relative_humidity_2m_roll30_mean",
-    "relative_humidity_2m_roll30_std",
-    "cloud_cover_roll3_mean",
-    "cloud_cover_roll3_std",
-    "cloud_cover_roll7_mean",
-    "cloud_cover_roll7_std",
-    "cloud_cover_roll14_mean",
-    "cloud_cover_roll14_std",
-    "cloud_cover_roll30_mean",
-    "cloud_cover_roll30_std",
-    "cci_roll3_mean",
-    "cci_roll3_std",
-    "cci_roll7_mean",
-    "cci_roll7_std",
-    "cci_roll14_mean",
-    "cci_roll14_std",
-    "cci_roll30_mean",
-    "cci_roll30_std",
-    "whi_roll3_mean",
-    "whi_roll3_std",
-    "whi_roll7_mean",
-    "whi_roll7_std",
-    "whi_roll14_mean",
-    "whi_roll14_std",
-    "whi_roll30_mean",
-    "whi_roll30_std",
-    "precipitation_roll3_sum",
-    "precipitation_roll7_sum",
-    "precipitation_roll14_sum",
-    "precipitation_roll30_sum",
-    "wind_gusts_10m_roll3_max",
-    "wind_gusts_10m_roll7_max",
-    "wind_gusts_10m_roll14_max",
-    "wind_gusts_10m_roll30_max",
-    "temperature_2m_delta1",
-    "temperature_2m_delta3",
-    "cci_delta1",
-    "cci_delta3",
-    "whi_delta1",
-    "whi_delta3",
-    "doy_sin",
-    "doy_cos"
-  ],
-  "feature_column_order_is_significant": true,
   "history_days": 30,
-  "compared_experiments": [
-    "cci_dummy_mean",
-    "cci_mlp",
-    "cci_polynomial_regression",
-    "cci_random_forest",
-    "cci_xgboost"
-  ],
-  "excluded_experiments": [],
   "warnings": [
-    "Margin over cci_random_forest (0.0704) is within the typical seed spread (0.0867); the top two are not clearly separated."
+    "Margin over cci_xgboost (0.1416) is smaller than the typical year-to-year spread (0.2870); the two are not clearly separated, so simplicity and cost can decide between them."
   ]
 }

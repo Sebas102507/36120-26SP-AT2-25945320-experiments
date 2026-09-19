@@ -114,14 +114,12 @@
   ],
   "feature_column_order_is_significant": true,
   "split_boundaries": {
-    "val_start": "2024-01-01",
     "test_start": "2025-01-01",
     "production_cutoff": "2026-01-01"
   },
   "embargo_days": 7,
   "evaluated_on": [
-    "train",
-    "val"
+    "walk-forward CV on the development split"
   ],
   "held_out": [
     "test"
@@ -134,14 +132,14 @@
       "algorithm": "XGBoost Classifier",
       "forecast_horizon": "7 Days",
       "hyperparameters": {
-        "n_estimators": 550,
-        "learning_rate": 0.08239259988325646,
-        "max_depth": 8,
-        "min_child_weight": 0.6778278400991224,
-        "subsample": 0.523069874672299,
-        "colsample_bytree": 0.8361586743058776,
-        "reg_lambda": 30.630652768704493,
-        "reg_alpha": 0.07910803510602006,
+        "n_estimators": 500,
+        "learning_rate": 0.042382366085700875,
+        "max_depth": 3,
+        "min_child_weight": 0.7211566321189479,
+        "subsample": 0.8836406241537427,
+        "colsample_bytree": 0.9938216468370779,
+        "reg_lambda": 4.894423961685542,
+        "reg_alpha": 0.22884435130741382,
         "balance_classes": true
       },
       "features": [
@@ -252,57 +250,64 @@
         "doy_cos"
       ],
       "feature_importance": {
-        "temp_hazard": 0.03071071021258831,
-        "wind_gusts_10m_roll30_max": 0.025728628039360046,
-        "wind_speed_10m_lag7": 0.025692325085401535,
-        "relative_humidity_2m_lag7": 0.025552984327077866,
-        "precipitation_lag7": 0.02522626891732216,
-        "rain_hazard": 0.020214887335896492,
-        "cloud_cover_roll3_mean": 0.01880108006298542,
-        "precipitation_lag3": 0.017925888299942017,
-        "relative_humidity_2m_roll7_std": 0.017809854820370674,
-        "cloud_cover_roll7_std": 0.01747620850801468,
-        "wind_gusts_10m_roll14_max": 0.016833364963531494,
-        "whi_roll7_std": 0.01652217097580433,
-        "whi_roll3_std": 0.015138491988182068,
-        "cci_lag7": 0.014290153048932552,
-        "relative_humidity_2m_roll30_std": 0.01296528521925211,
-        "temperature_2m_roll3_std": 0.012937083840370178,
-        "cci_roll30_std": 0.012516655959188938,
-        "temperature_2m_lag3": 0.01242800522595644,
-        "wind_gusts_10m_roll7_max": 0.01233393419533968,
-        "wind_gusts_10m_roll3_max": 0.012319250963628292
+        "cci_delta1": 0.03448541462421417,
+        "cloud_cover_roll7_std": 0.02582572028040886,
+        "whi_roll7_std": 0.025517072528600693,
+        "temperature_2m_roll3_mean": 0.025191664695739746,
+        "relative_humidity_2m_lag7": 0.02228597365319729,
+        "cloud_cover": 0.022150646895170212,
+        "temperature_2m_delta1": 0.02188791148364544,
+        "wind_speed_10m_lag7": 0.019899263978004456,
+        "wind_gusts_10m_lag7": 0.019687842577695847,
+        "temperature_2m_roll3_std": 0.018895700573921204,
+        "cci_lag2": 0.018015528097748756,
+        "wind_gusts_10m_roll7_max": 0.01752103492617607,
+        "precipitation": 0.016793355345726013,
+        "cloud_cover_roll3_std": 0.01638615131378174,
+        "precipitation_lag1": 0.01554208341985941,
+        "whi_roll14_std": 0.014738175086677074,
+        "precipitation_roll30_sum": 0.01413681823760271,
+        "precipitation_lag3": 0.014126056805253029,
+        "precipitation_lag7": 0.01346157118678093,
+        "relative_humidity_2m_roll3_std": 0.012643450871109962
       },
       "validation_metrics": {
-        "accuracy": 0.5598885793871866,
-        "balanced_accuracy": 0.39152418035099606,
-        "macro_f1": 0.28542102786297324,
-        "weighted_f1": 0.546212961670924,
-        "mean_ordinal_error": 0.4623955431754875
+        "accuracy": 0.4767123287671233,
+        "balanced_accuracy": 0.2987273719506614,
+        "macro_f1": 0.2584138991444998,
+        "weighted_f1": 0.48175555955688676,
+        "mean_ordinal_error": 0.5732876712328767,
+        "train_macro_f1": 0.7633852909466169
       },
       "baseline_metrics": {
         "majority_class": {
-          "accuracy": 0.4596100278551532,
-          "balanced_accuracy": 0.3333333333333333,
-          "macro_f1": 0.15744274809160305,
-          "weighted_f1": 0.2894490633438942,
-          "mean_ordinal_error": 0.5821727019498607
+          "accuracy": 0.4780821917808219,
+          "balanced_accuracy": 0.29166666666666663,
+          "macro_f1": 0.161197670024891,
+          "weighted_f1": 0.31137370346207993,
+          "mean_ordinal_error": 0.5691780821917809
         },
         "persistence": {
-          "accuracy": 0.4428969359331476,
-          "balanced_accuracy": 0.3069917047570679,
-          "macro_f1": 0.2301376131240891,
-          "weighted_f1": 0.4424850992444279,
-          "mean_ordinal_error": 0.6072423398328691
+          "accuracy": 0.4678082191780822,
+          "balanced_accuracy": 0.2949889310865247,
+          "macro_f1": 0.25459516195765414,
+          "weighted_f1": 0.4675786585766115,
+          "mean_ordinal_error": 0.5773972602739725
         },
         "seasonal_mode": {
-          "accuracy": 0.5515320334261838,
-          "balanced_accuracy": 0.3862535974267818,
-          "macro_f1": 0.28069725398221446,
-          "weighted_f1": 0.5369880394060725,
-          "mean_ordinal_error": 0.479108635097493
+          "accuracy": 0.5410958904109588,
+          "balanced_accuracy": 0.3294988925650513,
+          "macro_f1": 0.274152021919102,
+          "weighted_f1": 0.5273636415389804,
+          "mean_ordinal_error": 0.48561643835616436
         }
-      }
+      },
+      "fold_scores": [
+        0.281,
+        0.2624,
+        0.2575,
+        0.2327
+      ]
     }
   ],
   "class_labels": {
@@ -311,15 +316,53 @@
     "2": "High Risk",
     "3": "Extreme Risk"
   },
-  "selection": "optuna (TPE)",
-  "selection_metric": "validation macro_f1",
-  "seed_stability": [
+  "stage": "experiment",
+  "selection": "optuna (TPE) on 4-fold walk-forward CV; hyperparameters tuned on all features",
+  "selection_metric": "mean macro_f1 over the walk-forward CV folds",
+  "cv_folds": [
     {
-      "target": "whc_t7",
-      "seed_mean": 0.2663626687649027,
-      "seed_spread": 0.0300098954627524,
-      "top10_search_spread": 0.018906878682991735,
-      "search_beats_noise": false
+      "fold": 1,
+      "train_start": "2000-01-31",
+      "train_end": "2020-12-18",
+      "validate_start": "2020-12-26",
+      "validate_end": "2021-12-25",
+      "train_rows": 7628,
+      "validate_rows": 365
+    },
+    {
+      "fold": 2,
+      "train_start": "2000-01-31",
+      "train_end": "2021-12-18",
+      "validate_start": "2021-12-26",
+      "validate_end": "2022-12-25",
+      "train_rows": 7993,
+      "validate_rows": 365
+    },
+    {
+      "fold": 3,
+      "train_start": "2000-01-31",
+      "train_end": "2022-12-18",
+      "validate_start": "2022-12-26",
+      "validate_end": "2023-12-25",
+      "train_rows": 8358,
+      "validate_rows": 365
+    },
+    {
+      "fold": 4,
+      "train_start": "2000-01-31",
+      "train_end": "2023-12-18",
+      "validate_start": "2023-12-26",
+      "validate_end": "2024-12-24",
+      "train_rows": 8723,
+      "validate_rows": 365
     }
-  ]
+  ],
+  "fixed_params": {
+    "tree_method": "hist",
+    "objective": "multi:softprob",
+    "n_jobs": -1,
+    "verbosity": 0
+  },
+  "null_model": false,
+  "refinable": true
 }

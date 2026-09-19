@@ -114,14 +114,12 @@
   ],
   "feature_column_order_is_significant": true,
   "split_boundaries": {
-    "val_start": "2024-01-01",
     "test_start": "2025-01-01",
     "production_cutoff": "2026-01-01"
   },
   "embargo_days": 7,
   "evaluated_on": [
-    "train",
-    "val"
+    "walk-forward CV on the development split"
   ],
   "held_out": [
     "test"
@@ -134,8 +132,8 @@
       "algorithm": "Multinomial Logistic Regression",
       "forecast_horizon": "7 Days",
       "hyperparameters": {
-        "C": 38.7397467081673,
-        "class_weight": "balanced"
+        "C": 0.00798641614039674,
+        "class_weight": null
       },
       "features": [
         "temperature_2m",
@@ -245,57 +243,64 @@
         "doy_cos"
       ],
       "feature_importance": {
-        "cloud_cover_lag3": 0.052582157051378656,
-        "whi_lag3": 0.046130816100852866,
-        "temperature_2m_roll7_mean": 0.045434659899428013,
-        "cci_roll30_mean": 0.04499396407849009,
-        "temperature_2m_roll30_mean": 0.04469635167542995,
-        "precipitation_roll3_sum": 0.04228320091423795,
-        "whi_delta3": 0.036389241052904635,
-        "whi_delta1": 0.03376811516174038,
-        "cci_roll7_mean": 0.03355823155695374,
-        "precipitation": 0.031859511272132254,
-        "precipitation_lag3": 0.031008268982044368,
-        "whi": 0.029742280580055326,
-        "wind_gusts_10m_lag3": 0.02851470360510392,
-        "rain_hazard": 0.028187333477071568,
-        "whi_roll3_std": 0.027118604379953264,
-        "wind_gusts_10m_lag2": 0.026554207190425273,
-        "relative_humidity_2m_roll14_mean": 0.02631811673048437,
-        "whi_roll7_std": 0.025616381167636298,
-        "doy_cos": 0.024390143001754107,
-        "precipitation_roll7_sum": 0.023580390926157553
+        "doy_cos": 0.030708267265339186,
+        "relative_humidity_2m_roll7_mean": 0.01570863651645893,
+        "doy_sin": 0.01312254530905852,
+        "temperature_2m_roll30_mean": 0.012901657831859393,
+        "cloud_cover_roll7_std": 0.011366624831391049,
+        "temperature_2m_lag7": 0.011252430301117711,
+        "wind_gusts_10m_lag3": 0.011236743166607022,
+        "temp_hazard": 0.010516906581508256,
+        "temp_score": 0.010516906581508256,
+        "relative_humidity_2m_roll14_mean": 0.010096345384092853,
+        "wind_gusts_10m_roll30_max": 0.009700061619446842,
+        "temperature_2m_lag2": 0.0087944299657154,
+        "precipitation_lag2": 0.00813037115593852,
+        "temperature_2m_roll3_mean": 0.007561877166928366,
+        "whi": 0.007445541966140212,
+        "whi_delta3": 0.007242682565674785,
+        "whi_roll7_std": 0.007188355856952722,
+        "cci_roll3_std": 0.0071325371031938254,
+        "wind_gusts_10m_lag7": 0.006909221307774094,
+        "cloud_cover_lag2": 0.006797445096870014
       },
       "validation_metrics": {
-        "accuracy": 0.46518105849582175,
-        "balanced_accuracy": 0.36576942610462165,
-        "macro_f1": 0.2705399499329212,
-        "weighted_f1": 0.4924335945098268,
-        "mean_ordinal_error": 0.6350974930362117
+        "accuracy": 0.5143835616438357,
+        "balanced_accuracy": 0.314799347896365,
+        "macro_f1": 0.2552492169934991,
+        "weighted_f1": 0.4908112742967977,
+        "mean_ordinal_error": 0.5205479452054795,
+        "train_macro_f1": 0.28225224864343507
       },
       "baseline_metrics": {
         "majority_class": {
-          "accuracy": 0.4596100278551532,
-          "balanced_accuracy": 0.3333333333333333,
-          "macro_f1": 0.15744274809160305,
-          "weighted_f1": 0.2894490633438942,
-          "mean_ordinal_error": 0.5821727019498607
+          "accuracy": 0.4780821917808219,
+          "balanced_accuracy": 0.29166666666666663,
+          "macro_f1": 0.161197670024891,
+          "weighted_f1": 0.31137370346207993,
+          "mean_ordinal_error": 0.5691780821917809
         },
         "persistence": {
-          "accuracy": 0.4428969359331476,
-          "balanced_accuracy": 0.3069917047570679,
-          "macro_f1": 0.2301376131240891,
-          "weighted_f1": 0.4424850992444279,
-          "mean_ordinal_error": 0.6072423398328691
+          "accuracy": 0.4678082191780822,
+          "balanced_accuracy": 0.2949889310865247,
+          "macro_f1": 0.25459516195765414,
+          "weighted_f1": 0.4675786585766115,
+          "mean_ordinal_error": 0.5773972602739725
         },
         "seasonal_mode": {
-          "accuracy": 0.5515320334261838,
-          "balanced_accuracy": 0.3862535974267818,
-          "macro_f1": 0.28069725398221446,
-          "weighted_f1": 0.5369880394060725,
-          "mean_ordinal_error": 0.479108635097493
+          "accuracy": 0.5410958904109588,
+          "balanced_accuracy": 0.3294988925650513,
+          "macro_f1": 0.274152021919102,
+          "weighted_f1": 0.5273636415389804,
+          "mean_ordinal_error": 0.48561643835616436
         }
-      }
+      },
+      "fold_scores": [
+        0.2641,
+        0.2318,
+        0.2718,
+        0.2534
+      ]
     }
   ],
   "class_labels": {
@@ -304,15 +309,50 @@
     "2": "High Risk",
     "3": "Extreme Risk"
   },
-  "selection": "optuna (TPE)",
-  "selection_metric": "validation macro_f1",
-  "seed_stability": [
+  "stage": "experiment",
+  "selection": "optuna (TPE) on 4-fold walk-forward CV; hyperparameters tuned on all features",
+  "selection_metric": "mean macro_f1 over the walk-forward CV folds",
+  "cv_folds": [
     {
-      "target": "whc_t7",
-      "seed_mean": 0.2705399499329212,
-      "seed_spread": 0.0,
-      "top10_search_spread": 0.007651502763652118,
-      "search_beats_noise": true
+      "fold": 1,
+      "train_start": "2000-01-31",
+      "train_end": "2020-12-18",
+      "validate_start": "2020-12-26",
+      "validate_end": "2021-12-25",
+      "train_rows": 7628,
+      "validate_rows": 365
+    },
+    {
+      "fold": 2,
+      "train_start": "2000-01-31",
+      "train_end": "2021-12-18",
+      "validate_start": "2021-12-26",
+      "validate_end": "2022-12-25",
+      "train_rows": 7993,
+      "validate_rows": 365
+    },
+    {
+      "fold": 3,
+      "train_start": "2000-01-31",
+      "train_end": "2022-12-18",
+      "validate_start": "2022-12-26",
+      "validate_end": "2023-12-25",
+      "train_rows": 8358,
+      "validate_rows": 365
+    },
+    {
+      "fold": 4,
+      "train_start": "2000-01-31",
+      "train_end": "2023-12-18",
+      "validate_start": "2023-12-26",
+      "validate_end": "2024-12-24",
+      "train_rows": 8723,
+      "validate_rows": 365
     }
-  ]
+  ],
+  "fixed_params": {
+    "max_iter": 4000
+  },
+  "null_model": false,
+  "refinable": true
 }

@@ -243,7 +243,6 @@
   ],
   "warmup_days": 30,
   "split_boundaries": {
-    "val_start": "2024-01-01",
     "test_start": "2025-01-01",
     "production_cutoff": "2026-01-01"
   },

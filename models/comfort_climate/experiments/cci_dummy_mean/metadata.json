@@ -114,14 +114,12 @@
   ],
   "feature_column_order_is_significant": true,
   "split_boundaries": {
-    "val_start": "2024-01-01",
     "test_start": "2025-01-01",
     "production_cutoff": "2026-01-01"
   },
   "embargo_days": 3,
   "evaluated_on": [
-    "train",
-    "val"
+    "walk-forward CV on the development split"
   ],
   "held_out": [
     "test"
@@ -245,25 +243,32 @@
       ],
       "feature_importance": {},
       "validation_metrics": {
-        "mae": 8.725017967823987,
-        "rmse": 11.100488076462915,
-        "r2": -0.0232993662565657,
-        "pred_std": 0.0
+        "mae": 8.471084977404898,
+        "rmse": 10.994273351042796,
+        "r2": -0.11182804292197113,
+        "pred_std": 1.0658141036401503e-14,
+        "train_mae": 7.692799115781989
       },
       "baseline_metrics": {
-        "persistence": {
-          "mae": 7.531405205713259,
-          "rmse": 9.860882870059875,
-          "r2": 0.19248582208596088,
-          "pred_std": 10.907218343467814
-        },
         "climatology": {
-          "mae": 7.588490921763515,
-          "rmse": 10.10064839435506,
-          "r2": 0.15273929884399673,
-          "pred_std": 3.7287815047773085
+          "mae": 7.788582568938509,
+          "rmse": 10.4055268306538,
+          "r2": 0.0015203617690910387,
+          "pred_std": 3.7119056782345954
+        },
+        "persistence": {
+          "mae": 7.2395020337006155,
+          "rmse": 9.614136184498363,
+          "r2": 0.14172994808385064,
+          "pred_std": 10.40693737693011
         }
-      }
+      },
+      "fold_scores": [
+        8.1593,
+        9.4692,
+        7.3486,
+        8.9073
+      ]
     },
     {
       "target": "Climate Comfort Index",
@@ -383,25 +388,32 @@
       ],
       "feature_importance": {},
       "validation_metrics": {
-        "mae": 8.73725077371416,
-        "rmse": 11.110991808553456,
-        "r2": -0.022923672607613632,
-        "pred_std": 0.0
+        "mae": 8.475454287826496,
+        "rmse": 10.997507501356882,
+        "r2": -0.11149252356574679,
+        "pred_std": 3.552713678800501e-15,
+        "train_mae": 7.692939056455602
       },
       "baseline_metrics": {
-        "persistence": {
-          "mae": 8.590837597816105,
-          "rmse": 11.478652005521065,
-          "r2": -0.09174032985943259,
-          "pred_std": 10.907218343467814
-        },
         "climatology": {
-          "mae": 7.599845122592146,
-          "rmse": 10.10597225706203,
-          "r2": 0.15375955561134047,
-          "pred_std": 3.7269995673449596
+          "mae": 7.784244191984717,
+          "rmse": 10.400887051046666,
+          "r2": 0.0031012035939954052,
+          "pred_std": 3.7004266611518237
+        },
+        "persistence": {
+          "mae": 9.069497396763948,
+          "rmse": 11.787771532680804,
+          "r2": -0.2954150252584522,
+          "pred_std": 10.40693737693011
         }
-      }
+      },
+      "fold_scores": [
+        8.1924,
+        9.4329,
+        7.3571,
+        8.9195
+      ]
     },
     {
       "target": "Climate Comfort Index",
@@ -521,29 +533,76 @@
       ],
       "feature_importance": {},
       "validation_metrics": {
-        "mae": 8.749551495082635,
-        "rmse": 11.116360594440355,
-        "r2": -0.02235816163309945,
-        "pred_std": 0.0
+        "mae": 8.475835837183983,
+        "rmse": 10.996350099752936,
+        "r2": -0.11021757372263308,
+        "pred_std": 3.552713678800501e-15,
+        "train_mae": 7.692917007756063
       },
       "baseline_metrics": {
-        "persistence": {
-          "mae": 9.152212712600312,
-          "rmse": 11.95942149597048,
-          "r2": -0.18330898177224997,
-          "pred_std": 10.907218343467814
-        },
         "climatology": {
-          "mae": 7.609687328471284,
-          "rmse": 10.107081522328421,
-          "r2": 0.1548586445867174,
-          "pred_std": 3.7258703486742815
+          "mae": 7.77880308419989,
+          "rmse": 10.398368511591473,
+          "r2": 0.004440145613760188,
+          "pred_std": 3.7009897016261246
+        },
+        "persistence": {
+          "mae": 9.9166604396218,
+          "rmse": 12.783349037126282,
+          "r2": -0.5288841180911728,
+          "pred_std": 10.40693737693011
         }
-      }
+      },
+      "fold_scores": [
+        8.1909,
+        9.4463,
+        7.332,
+        8.9342
+      ]
     }
   ],
-  "selection": "fixed default parameters (no search)",
-  "selection_metric": "validation mae",
+  "stage": "experiment",
+  "selection": "default parameters, all features",
+  "selection_metric": "mean mae over the walk-forward CV folds",
+  "cv_folds": [
+    {
+      "fold": 1,
+      "train_start": "2000-01-31",
+      "train_end": "2020-12-26",
+      "validate_start": "2020-12-30",
+      "validate_end": "2021-12-29",
+      "train_rows": 7636,
+      "validate_rows": 365
+    },
+    {
+      "fold": 2,
+      "train_start": "2000-01-31",
+      "train_end": "2021-12-26",
+      "validate_start": "2021-12-30",
+      "validate_end": "2022-12-29",
+      "train_rows": 8001,
+      "validate_rows": 365
+    },
+    {
+      "fold": 3,
+      "train_start": "2000-01-31",
+      "train_end": "2022-12-26",
+      "validate_start": "2022-12-30",
+      "validate_end": "2023-12-29",
+      "train_rows": 8366,
+      "validate_rows": 365
+    },
+    {
+      "fold": 4,
+      "train_start": "2000-01-31",
+      "train_end": "2023-12-26",
+      "validate_start": "2023-12-30",
+      "validate_end": "2024-12-28",
+      "train_rows": 8731,
+      "validate_rows": 365
+    }
+  ],
   "fixed_params": {},
-  "seed_stability": []
+  "null_model": true,
+  "refinable": false
 }
