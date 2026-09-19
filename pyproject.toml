@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "36120_26sp_at2_25945320_experiments"
 version = "0.0.1"
-description = "Hi"
+description = "UTS 36120 AT2 (student 25945320): experiments for Sydney Climate Comfort Index and Weather Hazard Category forecasting"
 authors = [
   { name = "Juan Sebastian Vargas" },
 ]

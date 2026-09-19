@@ -1,9 +1,24 @@
 name: Sync production models to API
 
+# Copies the production artefacts into the API repository on every push to main, using the same
+# layout as `make artefacts` in the API repository:
+#   models/preprocessing/     fitted nucleus_ml preprocessing pipeline
+#   models/comfort_climate/   promoted CCI bundle
+#   models/weather_hazard/    promoted WHC bundle
+# Each bundle keeps its own folder because both contain metadata.json, manifest.json,
+# drift_reference.json and promotion.json.
+#
+# Requires the repository secret API_REPO_TOKEN: a token with write access to the API repository.
+
 on:
   push:
     branches:
       - main
+    paths:
+      - "models/preprocessing/**"
+      - "models/comfort_climate/production/**"
+      - "models/weather_hazard/production/**"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,12 +28,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_REPOSITORY: Sebas102507/36120-26SP-AT2-25945320-api
-      API_MODEL_DIRECTORY: ml/model
+      API_MODEL_DIRECTORY: models
     steps:
       - name: Check out experiments repository
         uses: actions/checkout@v4
         with:
           ref: main
+
+      - name: Check that every artefact exists
+        run: |
+          test -f models/preprocessing/feature_pipeline.joblib
+          test -f models/comfort_climate/production/manifest.json
+          test -f models/weather_hazard/production/manifest.json
 
       - name: Check out API repository
         uses: actions/checkout@v4
@@ -31,23 +52,21 @@ jobs:
       - name: Replace API models with production artefacts
         run: |
           destination="api-repository/${API_MODEL_DIRECTORY}"
+          # Start from an empty folder so a previous champion's files cannot linger.
+          rm -rf "$destination"
           mkdir -p "$destination"
 
-          # Wipe the API model directory so a previous CCI or WHC bundle cannot linger.
-          find "$destination" -mindepth 1 -delete
-
+          rsync -av --exclude=".gitkeep" models/preprocessing/ "$destination/preprocessing/"
           rsync -av --exclude=".gitkeep" \
-            models/comfort_climate/production/ "$destination/"
+            models/comfort_climate/production/ "$destination/comfort_climate/"
           rsync -av --exclude=".gitkeep" \
-            models/weather_hazard/production/ "$destination/"
+            models/weather_hazard/production/ "$destination/weather_hazard/"
 
           echo "Models now in ${API_MODEL_DIRECTORY}:"
           find "$destination" -type f | sort
 
       - name: Commit and push changed artefacts
         working-directory: api-repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.API_REPO_TOKEN }}
         run: |
           git add -A -- "${API_MODEL_DIRECTORY}"
 

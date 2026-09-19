@@ -1,0 +1,14 @@
+# Environment and tooling
+.venv/
+.env
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.ipython-temp/
+.jupyter/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+
+# Note: data/ and models/ are committed on purpose. The brief requires the final model artefacts
+# in models/, and the processed data lets the notebooks be rerun without calling the API again.
