@@ -158,32 +158,99 @@ uv run --with jupyterlab jupyter lab
 
 ## 6. Reproducing the results
 
-Run the notebooks in this order. Each one reads only what the previous ones wrote.
+Run the notebooks **top to bottom, in the order below**. Later notebooks only read artefacts that
+earlier notebooks wrote. After setup (`uv sync` and `source .venv/bin/activate`), use the `.venv`
+kernel.
 
-| # | Notebook | Produces |
-|:-:|:--|:--|
-| 1 | `notebooks/ingestion/36120_26SP_AT2_25945320_data_ingestion.ipynb` | `data/raw/sydney_hourly.csv` (2000–2025) |
-| 2 | `notebooks/eda/36120_26SP_AT2_25945320_data_eda.ipynb` | EDA figures in `reports/figures/` |
-| 3 | `notebooks/preprocessing/36120_26SP_AT2_25945320_preprocessing.ipynb` | `data/processed/`, `models/preprocessing/feature_pipeline.joblib` |
-| 4 | `notebooks/comfort_climate/*_cci_<algorithm>_experiment.ipynb` (5 notebooks, any order) | `models/comfort_climate/experiments/<name>/` |
-| 4 | `notebooks/weather_hazard/*_whc_<algorithm>_experiment.ipynb` (5 notebooks, any order) | `models/weather_hazard/experiments/<name>/` |
-| 5 | `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_comparison.ipynb` | `models/comfort_climate/production/` |
-| 5 | `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_comparison.ipynb` | `models/weather_hazard/production/` |
+CCI and WHC are independent after preprocessing: you can finish the whole CCI track (steps 4a then
+5a) before starting WHC, or run the two experiment groups in parallel. Do **not** run a
+comparison notebook until every experiment notebook for that task has finished.
 
-Notes:
+```text
+ingestion  →  eda (optional for models)  →  preprocessing
+                                              ├─ CCI experiments (any order)  →  CCI comparison
+                                              └─ WHC experiments (any order)  →  WHC comparison
+```
 
-- **The processed data and model bundles are committed,** so any notebook from step 4 onwards
-  can be rerun without repeating the earlier steps. Set `REFRESH = False` in the ingestion
-  notebook to reuse `data/raw/sydney_hourly.csv` instead of downloading again.
-- **Runtime.** Every tuning trial fits one model per fold (four folds). For a quick pass, lower
-  `N_TRIALS` in an experiment notebook's setup cell, or `FEATURE_TRIALS` / `RETUNE_TRIALS` in a
-  comparison notebook, e.g. to 10 / 10 / 5.
-- **Randomness.** Results are seeded (`RANDOM_STATE = 25945320` in `nucleus_ml.weather`), so a
-  rerun gives the same selections.
-- **Progress output.** `VERBOSE = 1` in each notebook prints every step and Optuna trial; set it
-  to `0` for results only.
-- **The test split is loaded only by the two comparison notebooks,** after the champion has been
-  chosen.
+### Step 1 — Ingestion
+
+| Notebook | Reads | Writes |
+|:--|:--|:--|
+| `notebooks/ingestion/36120_26SP_AT2_25945320_data_ingestion.ipynb` | Open-Meteo API | `data/raw/sydney_hourly.csv` (2000–2025) |
+
+Leave `REFRESH = False` to reuse the committed raw file. Set it to `True` only if you need a
+fresh download. 2026 onwards is never downloaded: it is production data.
+
+### Step 2 — Exploratory data analysis (optional for modelling)
+
+| Notebook | Reads | Writes |
+|:--|:--|:--|
+| `notebooks/eda/36120_26SP_AT2_25945320_data_eda.ipynb` | `data/raw/sydney_hourly.csv` | figures under `reports/figures/` |
+
+This notebook does not feed the models. Skip it if you only need to reproduce trained artefacts.
+
+### Step 3 — Preprocessing (required before any experiment)
+
+| Notebook | Reads | Writes |
+|:--|:--|:--|
+| `notebooks/preprocessing/36120_26SP_AT2_25945320_preprocessing.ipynb` | `data/raw/sydney_hourly.csv` | `data/interim/`, `data/processed/comfort_climate/`, `data/processed/weather_hazard/`, `models/preprocessing/feature_pipeline.joblib` |
+
+This is the shared contract: daily aggregation, CCI and WHC targets, lagged/rolling features,
+leakage audit, and the time split (development 2000–2024, test 2025). Every later notebook
+assumes these files exist.
+
+### Step 4a — CCI experiments (any order among themselves)
+
+Each notebook trains one algorithm on `data/processed/comfort_climate/` and writes a bundle under
+`models/comfort_climate/experiments/<name>/`. Run **all five** before the CCI comparison.
+
+1. `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_dummy_mean_experiment.ipynb`
+2. `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_polynomial_regression_experiment.ipynb`
+3. `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_random_forest_experiment.ipynb`
+4. `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_xgboost_experiment.ipynb`
+5. `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_mlp_experiment.ipynb`
+
+### Step 4b — WHC experiments (any order among themselves)
+
+Same idea on `data/processed/weather_hazard/`, writing to
+`models/weather_hazard/experiments/<name>/`. Run **all five** before the WHC comparison.
+
+1. `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_dummy_experiment.ipynb`
+2. `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_logistic_regression_experiment.ipynb`
+3. `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_random_forest_experiment.ipynb`
+4. `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_xgboost_experiment.ipynb`
+5. `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_mlp_experiment.ipynb`
+
+### Step 5a — CCI comparison and promotion
+
+| Notebook | Reads | Writes |
+|:--|:--|:--|
+| `notebooks/comfort_climate/36120_26SP_AT2_25945320_cci_comparison.ipynb` | all CCI experiment bundles + processed CCI splits | `models/comfort_climate/production/` (`cci_model_*`) |
+
+### Step 5b — WHC comparison and promotion
+
+| Notebook | Reads | Writes |
+|:--|:--|:--|
+| `notebooks/weather_hazard/36120_26SP_AT2_25945320_whc_comparison.ipynb` | all WHC experiment bundles + processed WHC splits | `models/weather_hazard/production/` (`whc_model_*`) |
+
+These two notebooks are the **only** place the 2025 test year is scored, and only after the
+champion is chosen on development data. After both have run, the production folders are what the
+API should serve (see section 7).
+
+### Notes for a replicable rerun
+
+- **Committed artefacts.** Raw data, processed tables and model bundles are in git, so you can
+  start at step 4 (or 5) without repeating ingestion and preprocessing. If a comparison notebook
+  reports a stale bundle, rerun that experiment notebook, then the comparison notebook.
+- **Do not skip an experiment.** The comparison notebook ranks every bundle it finds. A missing
+  dummy or MLP run changes the ranking and can change the promoted champion.
+- **Seeds.** `RANDOM_STATE = 25945320` in `nucleus_ml.weather`. Leave it unchanged.
+- **Runtime.** Every Optuna trial fits one model per walk-forward fold (four folds). For a
+  quicker pass only, lower `N_TRIALS` in an experiment notebook, or `FEATURE_TRIALS` /
+  `RETUNE_TRIALS` in a comparison notebook (for example 10 / 10 / 5). That will **not** match
+  the submitted selections.
+- **Progress.** `VERBOSE = 1` prints every step and trial; `0` prints results only.
+- **Ingestion.** `REFRESH = False` reuses `data/raw/sydney_hourly.csv`.
 
 ## 7. Handing the models to the API
 
