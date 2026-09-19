@@ -45,6 +45,11 @@ format:
 test:
 	python -m pytest tests
 
+## Test the deployed API (override the target with API_BASE_URL=http://localhost:8080)
+.PHONY: test-api
+test-api:
+	API_TESTS_REQUIRED=1 python -m pytest tests/test_api.py -v
+
 
 ## Set up Python interpreter environment
 .PHONY: create_environment

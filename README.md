@@ -198,8 +198,24 @@ After step 5, the production artefacts are copied into the API repository in one
 ## 8. Tests and code quality
 
 ```bash
-make test     # pytest on tests/
-make lint     # ruff format --check + ruff check
+make test      # pytest on tests/ (API tests are skipped if the service is unreachable)
+make test-api  # only the API tests, against the live service; fails if it is down
+make lint      # ruff format --check + ruff check
+```
+
+`tests/test_api.py` checks the deployed API end to end over HTTP:
+
+- every required endpoint exists and returns the required structure;
+- CCI covers the next three dates, as whole numbers from 0 to 100;
+- WHC covers exactly date + 7, as one of the four categories;
+- `/model-metadata` has every required field;
+- invalid input gets the right error (400, 404, 405 or 422);
+- the OpenAPI documentation lists every endpoint.
+
+To test a local instance instead:
+
+```bash
+API_BASE_URL=http://localhost:8080 make test-api
 ```
 
 The analysis code itself (`nucleus_ml.weather`) is unit-tested in the package repository.
