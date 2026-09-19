@@ -544,5 +544,6 @@
   ],
   "selection": "fixed default parameters (no search)",
   "selection_metric": "validation mae",
+  "fixed_params": {},
   "seed_stability": []
 }
