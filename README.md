@@ -74,7 +74,99 @@ All logic (target formulas, ingestion, preprocessing, feature engineering, the `
 workflow, comparison and promotion) lives in the custom package module `nucleus_ml.weather`, so
 every notebook runs the same code.
 
-## 4. Repository structure
+## 4. Results
+
+Model selection used four expanding walk-forward folds (validation years 2021 to 2024). The 2025
+test year was scored once, after each champion was chosen. Full tables and discussion are in the
+project report; the highlights are below.
+
+### Data
+
+Sydney has a strong, regular seasonal cycle: mean temperature runs from about 12 °C in June and
+July to 23 °C in January, January to March are the most humid and cloudy months, and July to
+September the clearest.
+
+![Mean annual cycle](reports/figures/report/eda-seasonal-cycle.png)
+
+### Climate Comfort Index (regression)
+
+Walk-forward CV, mean MAE over 2021 to 2024 (lower is better):
+
+| Model | MAE +1 | MAE +2 | MAE +3 | Mean MAE |
+|:--|--:|--:|--:|--:|
+| Polynomial ridge | 6.27 | 7.27 | 7.53 | 7.02 |
+| XGBoost | 6.22 | 7.30 | 7.57 | 7.03 |
+| Random forest | 6.23 | 7.31 | 7.57 | 7.04 |
+| MLP | 6.89 | 7.89 | 8.22 | 7.67 |
+| Climatology (baseline) | 7.79 | 7.78 | 7.78 | 7.78 |
+| Persistence (baseline) | 7.24 | 9.07 | 9.92 | 8.74 |
+| Dummy mean (null model) | 8.47 | 8.48 | 8.48 | 8.47 |
+
+Three algorithms beat both baselines at every horizon but are separated by only 0.011 MAE, far
+less than the year-to-year spread of about 0.29: statistically a tie. At +1 day the model relies
+on today's CCI (importance 0.53); by +3 days the top feature is the seasonal `doy_cos`, so the
+model moves from persistence to seasonality.
+
+![XGBoost out-of-fold CCI predictions](reports/figures/report/cci-xgboost-oof-predictions.png)
+![Random forest feature importance per horizon](reports/figures/report/cci-random-forest-importance.png)
+
+**Champion on the 2025 test year** (random forest, refitted on 2000 to 2024):
+
+| Horizon | Champion MAE | Persistence | Climatology | Gain vs best baseline |
+|:--|--:|--:|--:|--:|
+| +1 day | 6.79 | 7.72 | 8.14 | 12 % |
+| +2 days | 7.74 | 9.58 | 8.16 | 5 % |
+| +3 days | 8.16 | 10.07 | 8.16 | 0 % |
+
+![CCI champion test-year predictions](reports/figures/report/cci-champion-test-2025.png)
+
+### Weather Hazard Category (classification)
+
+Walk-forward CV (macro F1 is the selection metric; higher is better):
+
+| Model | Macro F1 | Accuracy | Balanced acc. |
+|:--|--:|--:|--:|
+| Random forest | 0.274 | 0.539 | 0.328 |
+| Seasonal mode (baseline) | 0.274 | 0.541 | 0.329 |
+| MLP | 0.264 | 0.525 | 0.319 |
+| XGBoost | 0.258 | 0.477 | 0.299 |
+| Logistic regression | 0.255 | 0.514 | 0.315 |
+| Persistence (baseline) | 0.255 | 0.468 | 0.295 |
+| Dummy majority (null model) | 0.161 | 0.478 | 0.292 |
+
+Every learned model beats the dummy, but the best one only ties the seasonal-mode rule. High and
+Extreme Risk are 247 and 11 of 9,095 training days, and the classifier never predicts them
+reliably: on 2025 it caught none of the 19 High Risk days (three false alarms). Macro F1 was
+chosen over accuracy because the dummy model matches XGBoost on accuracy (0.478 vs 0.477) while
+scoring far lower on macro F1.
+
+![WHC random forest out-of-fold predictions](reports/figures/report/whc-random-forest-oof.png)
+![WHC champion test-year predictions](reports/figures/report/whc-champion-test-2025.png)
+
+### Models in production
+
+| Target | Features kept | Key hyperparameters | CV score | 2025 test |
+|:--|:--|:--|--:|--:|
+| CCI +1 | 47 | 400 trees, depth 16, min leaf 13 | 6.41 MAE | 6.79 MAE |
+| CCI +2 | 61 | 600 trees, depth 6, min leaf 3 | 7.40 MAE | 7.74 MAE |
+| CCI +3 | 17 | 150 trees, depth 10, min leaf 1 | 7.69 MAE | 8.16 MAE |
+| WHC +7 | 11 | 500 trees, depth 10, min leaf 11, balanced weights | 0.249 F1 | 0.246 F1 |
+
+### What we learned
+
+- **CCI is ready for +1 and +2 days**: 12 % and 5 % lower error than the best naive forecast.
+  By +3 days it offers no advantage over the seasonal average, and `/model-metadata` says so.
+- **WHC should stay advisory.** A seven-day hazard forecast from local history alone carries
+  little signal. The recommended next step is a binary High+Extreme alert (258 positive days,
+  2.8 %) tuned on recall or F2.
+- **Feature-family selection hurt.** A 20-trial search never evaluated the full feature set and
+  promoted a reduced configuration that scored worse in CV (CCI 7.07 to 7.16 MAE, WHC 0.274 to
+  0.249 F1). Cross-validation exposed it before the test year was touched; the fix is to include
+  the full set and keep selection only when it improves CV.
+- **An experiment-driven design change:** with tanh activations the MLP saturated near 76 and
+  compressed its predictions; removing tanh from the search space fixed the ceiling.
+
+## 5. Repository structure
 
 Based on the Cookiecutter Data Science template.
 
@@ -131,7 +223,7 @@ Each `production/` folder also contains `drift_reference.json` (the training dis
 feature used, for monitoring) and `promotion.json` (the audit record of how the champion was
 chosen).
 
-## 5. Setup
+## 6. Setup
 
 Requirements:
 
@@ -156,7 +248,7 @@ JupyterLab from the environment:
 uv run --with jupyterlab jupyter lab
 ```
 
-## 6. Reproducing the results
+## 7. Reproducing the results
 
 Run the notebooks **top to bottom, in the order below**. Later notebooks only read artefacts that
 earlier notebooks wrote. After setup (`uv sync` and `source .venv/bin/activate`), use the `.venv`
@@ -235,7 +327,7 @@ Same idea on `data/processed/weather_hazard/`, writing to
 
 These two notebooks are the **only** place the 2025 test year is scored, and only after the
 champion is chosen on development data. After both have run, the production folders are what the
-API should serve (see section 7).
+API should serve (see section 8).
 
 ### Notes for a replicable rerun
 
@@ -252,7 +344,7 @@ API should serve (see section 7).
 - **Progress.** `VERBOSE = 1` prints every step and trial; `0` prints results only.
 - **Ingestion.** `REFRESH = False` reuses `data/raw/sydney_hourly.csv`.
 
-## 7. Handing the models to the API
+## 8. Handing the models to the API
 
 After step 5, the production artefacts are copied into the API repository in one of two ways:
 
@@ -262,7 +354,7 @@ After step 5, the production artefacts are copied into the API repository in one
   token with write access to the API repository.
 - **Manually:** run `make artefacts` from the API repository (see its README).
 
-## 8. Tests and code quality
+## 9. Tests and code quality
 
 ```bash
 make test     # pytest on tests/
@@ -272,7 +364,7 @@ make lint     # ruff format --check + ruff check
 The analysis code itself (`nucleus_ml.weather`) is unit-tested in the package repository, and
 the deployed API is tested end to end over HTTP in the API repository (`make test-api`).
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 | Symptom | Cause and fix |
 |:--|:--|
@@ -283,7 +375,7 @@ the deployed API is tested end to end over HTTP in the API repository (`make tes
 | Open-Meteo request fails or times out | Rerun the cell (requests are retried), or set `REFRESH = False` to use the saved CSV. |
 | `ConvergenceWarning` from the MLP | Harmless: the trial is scored as usual; poorly converged settings simply score badly. |
 
-## 10. Use of generative AI
+## 11. Use of generative AI
 
 Generative AI (Claude, Anthropic) was used to support coding, debugging, documentation and
 report drafting. All generated content was reviewed, tested and validated by the student, who is
